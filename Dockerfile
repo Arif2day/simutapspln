@@ -24,7 +24,7 @@ RUN php artisan storage:link
 RUN php artisan config:clear
 RUN php artisan cache:clear
 RUN php artisan view:clear
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+# RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
 
 # Optional:
