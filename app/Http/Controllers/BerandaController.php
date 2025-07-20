@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use PDF;
 use iio\libmergepdf\Merger;
 use App\Models\Users;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Config;
 
 class BerandaController extends Controller
 {
