@@ -13,14 +13,14 @@
     <title>SIMUTAPSPLN</title>
 
     <!-- Custom fonts for this template-->
-    {!!Html::style(secure_asset('vendor/fontawesome-free/css/all.min.css'))!!}
+    {!!Html::style('vendor/fontawesome-free/css/all.min.css')!!}
 
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    {!!Html::style(secure_asset('css/sb-admin-2.min.css'))!!}
+    {!!Html::style('css/sb-admin-2.min.css')!!}
     <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/select/1.3.4/css/select.dataTables.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/rowreorder/1.2.8/css/rowReorder.dataTables.min.css" rel="stylesheet">
@@ -28,11 +28,11 @@
     <link href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.dataTables.min.css" rel="stylesheet">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon.ico') }}">
 
-    {!!Html::style(secure_asset('css/magnifier.css'))!!}
-    {!!Html::style(secure_asset('css/loader.css'))!!}
-    {!!Html::style(secure_asset('css/datepicker3.css'))!!}
-    {!!Html::style(secure_asset('css/addition.css'))!!}
-    {{-- {!!Html::style(secure_asset('css/styles.css'))!!} --}}
+    {!!Html::style('css/magnifier.css')!!}
+    {!!Html::style('css/loader.css')!!}
+    {!!Html::style('css/datepicker3.css')!!}
+    {!!Html::style('css/addition.css')!!}
+    {{-- {!!Html::style('css/styles.css')!!} --}}
 </head>
 <style>
     .bg-gradient-custom {
@@ -222,18 +222,18 @@
     </a>
 
     <!-- Bootstrap core JavaScript-->
-    {!!Html::script(secure_asset('vendor/jquery/jquery.min.js'))!!}
-    {!!Html::script(secure_asset('vendor/bootstrap/js/bootstrap.bundle.min.js'))!!}
+    {!!Html::script('vendor/jquery/jquery.min.js')!!}
+    {!!Html::script('vendor/bootstrap/js/bootstrap.bundle.min.js')!!}
 
     <!-- Core plugin JavaScript-->
-    {!!Html::script(secure_asset('vendor/jquery-easing/jquery.easing.min.js'))!!}
+    {!!Html::script('vendor/jquery-easing/jquery.easing.min.js')!!}
 
     <!-- Custom scripts for all pages-->
-    {!!Html::script(secure_asset('js/sb-admin-2.min.js'))!!}
+    {!!Html::script('js/sb-admin-2.min.js')!!}
 
     <!-- Page level plugins -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    {{-- {!!Html::script(secure_asset('vendor/chart.js/Chart.min.js'))!!} --}}
+    {{-- {!!Html::script('vendor/chart.js/Chart.min.js')!!} --}}
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Include a polyfill for ES6 Promises (optional) for IE11 -->
     <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.js"></script>
@@ -251,9 +251,9 @@
     <script src="https://cdn.datatables.net/fixedcolumns/3.2.1/js/dataTables.fixedColumns.min.js"></script>
 
 
-    {!!Html::script(secure_asset('js/Event.js'))!!}
-    {!!Html::script(secure_asset('js/Magnifier.js'))!!}
-    {!!Html::script(secure_asset('js/bootstrap-datepicker.js'))!!}
+    {!!Html::script('js/Event.js')!!}
+    {!!Html::script('js/Magnifier.js')!!}
+    {!!Html::script('js/bootstrap-datepicker.js')!!}
     <script>
         let lastScrollTop = 0;
         const header = document.getElementById('main-header');
