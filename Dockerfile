@@ -24,6 +24,9 @@ RUN php artisan storage:link
 RUN php artisan config:clear
 RUN php artisan cache:clear
 RUN php artisan view:clear
+
+CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
+
 # Optional:
 # RUN php artisan migrate --force
 
