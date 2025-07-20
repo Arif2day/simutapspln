@@ -20,7 +20,10 @@ COPY .env.example .env
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
 RUN php artisan key:generate
-
+RUN php artisan storage:link
+RUN php artisan config:clear
+RUN php artisan cache:clear
+RUN php artisan view:clear
 # Optional:
 # RUN php artisan migrate --force
 
