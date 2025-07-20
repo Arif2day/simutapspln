@@ -22,9 +22,14 @@ class BerandaController extends Controller
         // } catch (\PDOException $e) {
         //     echo "❌ Koneksi gagal: " . $e->getMessage();
         // }     
-        $user = Users::all();
-        dd($user);
-        $return = array();
-        return view("Guest.beranda.index", compact([]));
+        return [
+            'config' => Config::get('database.connections.mysql'),
+            'env_host' => env('DB_HOST'),
+            'env_port' => env('DB_PORT'),
+        ];
+        // $user = Users::all();
+        // dd($user);
+        // $return = array();
+        // return view("Guest.beranda.index", compact([]));
     }
 }
