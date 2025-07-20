@@ -39,8 +39,27 @@
             <i class="fas fa-fw fa-id-badge"></i>
             <span>Profile</span></a>
     </li>
+    <li class="nav-item {{ request()->is('permohonan-mutasi*') ? 'active' : '' }}">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePermohonanMutasi"
+            aria-expanded="true" aria-controls="collapsePermohonanMutasi">
+            <i class="fas fa-fw fa-database"></i>
+            <span>Permohonan Mutasi</span>
+        </a>
+        <div id="collapsePermohonanMutasi" class="collapse {{ request()->is('permohonan-mutasi*') ? 'show' : '' }}"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item {{ request()->is('permohonan-mutasi/permohonan') ? 'active' : '' }}" href="{{ url('permohonan-mutasi/permohonan') }}">
+                    Permohonan
+                </a>
+                <a class="collapse-item {{ request()->is('permohonan-mutasi/riwayat') ? 'active' : '' }}" href="#">
+                    {{-- {{ url('permohonan-mutasi/riwayat') }} --}}
+                    Riwayat
+                </a>
+            </div>
+        </div>
+    </li>
     @endif
-    <hr class="sidebar-divider">
+    {{-- <hr class="sidebar-divider"> --}}
 
     {{-- <li class="nav-item {{ 
         request()->is('permohonan-mutasi') ? 'active' : '' 
@@ -57,24 +76,7 @@
             <i class="fas fa-fw fa-users"></i>
             <span>Riwayat Permohonan</span></a>
     </li> --}}
-    <li class="nav-item {{ request()->is('permohonan-mutasi*') ? 'active' : '' }}">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePermohonanMutasi"
-            aria-expanded="true" aria-controls="collapsePermohonanMutasi">
-            <i class="fas fa-fw fa-database"></i>
-            <span>Permohonan Mutasi</span>
-        </a>
-        <div id="collapsePermohonanMutasi" class="collapse {{ request()->is('permohonan-mutasi*') ? 'show' : '' }}"
-            data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item {{ request()->is('permohonan-mutasi/permohonan') ? 'active' : '' }}" href="{{ url('permohonan-mutasi/permohonan') }}">
-                    Permohonan
-                </a>
-                <a class="collapse-item {{ request()->is('permohonan-mutasi/riwayat') ? 'active' : '' }}" href="{{ url('permohonan-mutasi/riwayat') }}">
-                    Riwayat
-                </a>
-            </div>
-        </div>
-    </li>
+    
     {{-- @if((Sentinel::getUser()->inRole('prodi-admin')))
     @include('Admin.sidebar-detail.menu-prodi')
     @endif

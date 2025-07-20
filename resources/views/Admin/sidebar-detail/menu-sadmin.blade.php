@@ -1,17 +1,11 @@
 <!-- Nav Item - Tables -->
-<li class="nav-item {{ 
-    request()->is('user-manager') ? 'active' : '' 
-    }}">
-    <a class="nav-link" href="{{url('user-manager')}}">
-        <i class="fas fa-fw fa-users"></i>
-        <span>Employee Manager</span></a>
-</li>
+
 
 <!-- Divider -->
 <hr class="sidebar-divider">
 <!-- Heading -->
 <div class="sidebar-heading">
-    MASTER
+    DIVISI TALENTA
 </div>
 
 <li class="nav-item {{ request()->is('master*') ? 'active' : '' }}">
@@ -39,6 +33,13 @@
     </div>
 </li>
 
+<li class="nav-item {{ 
+    request()->is('user-manager') ? 'active' : '' 
+    }}">
+    <a class="nav-link" href="{{url('user-manager')}}">
+        <i class="fas fa-fw fa-users"></i>
+        <span>Employee Manager</span></a>
+</li>
 {{-- <li class="nav-item {{ request()->is('layanan*') ? 'active' : '' }}">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayanan"
         aria-expanded="true" aria-controls="collapseLayanan">
