@@ -82,9 +82,9 @@
             </div>
         </div>
     </div>
-{{-- 
-    @include('Admin.SUPER.units.modal.add')
-    @include('Admin.SUPER.units.modal.edit') --}}
+
+    @include('Admin.PESERTA.permohonan-mutasi.modal.ajukan')
+    {{-- @include('Admin.SUPER.units.modal.edit') --}}
 
 </div>
 @endsection
@@ -146,165 +146,179 @@
         table.ajax.reload();
     }
 
-    function deleteUnit(params) {
-        Swal.fire({
-            title: 'Yakin?',
-            text: "Anda akan menghapus Data Unit.",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, hapus sekarang!'
-            }).then((result) => {
-            if (result.isConfirmed) {
-                let datar = {};
-                datar['_method']='DELETE';
-                datar['_token']=$('._token').data('token');
-                datar['id']=params;
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    type: 'delete',
-                    url: $("#urldel").val(),
-                    data:datar,
-                    success: function(data) {
-                        if (data.error==false) {
-                            table.ajax.reload();
-                            Swal.fire({icon: 'success', title: 'Deleted!',text: data.message});
-                        }else{
-                            Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: data.message,
-                            });
-                        }
-                    },
-                });                
-            }
-        });
-    }   
+    // function deleteUnit(params) {
+    //     Swal.fire({
+    //         title: 'Yakin?',
+    //         text: "Anda akan menghapus Data Unit.",
+    //         icon: 'warning',
+    //         showCancelButton: true,
+    //         confirmButtonColor: '#3085d6',
+    //         cancelButtonColor: '#d33',
+    //         confirmButtonText: 'Ya, hapus sekarang!'
+    //         }).then((result) => {
+    //         if (result.isConfirmed) {
+    //             let datar = {};
+    //             datar['_method']='DELETE';
+    //             datar['_token']=$('._token').data('token');
+    //             datar['id']=params;
+    //             $.ajaxSetup({
+    //                 headers: {
+    //                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //                 }
+    //             });
+    //             $.ajax({
+    //                 type: 'delete',
+    //                 url: $("#urldel").val(),
+    //                 data:datar,
+    //                 success: function(data) {
+    //                     if (data.error==false) {
+    //                         table.ajax.reload();
+    //                         Swal.fire({icon: 'success', title: 'Deleted!',text: data.message});
+    //                     }else{
+    //                         Swal.fire({
+    //                         icon: 'error',
+    //                         title: 'Oops...',
+    //                         text: data.message,
+    //                         });
+    //                     }
+    //                 },
+    //             });                
+    //         }
+    //     });
+    // }   
 
     // Form Sort Function
-    function clearFormUnit() {
-        document.getElementById('name').value='';
-        document.getElementById('address').value='';
-        $('#unit_type').val(-1);
-    } 
+    
 
-    function clearEditFormUnit() {
-        document.getElementById('e_id').value='';
-        document.getElementById('e_name').value='';
-        document.getElementById('e_address').value='';
-        $('#e_unit_type').val(-1);
-    } 
+    // function clearEditFormUnit() {
+    //     document.getElementById('e_id').value='';
+    //     document.getElementById('e_name').value='';
+    //     document.getElementById('e_address').value='';
+    //     $('#e_unit_type').val(-1);
+    // } 
 
-    function saveUnit() {
-        let name = $('input[id=name').val();
-        let address = $('textarea#address').val();        
-        let unit_type_id = $('#unit_type').val();
+    // function saveUnit() {
+    //     let name = $('input[id=name').val();
+    //     let address = $('textarea#address').val();        
+    //     let unit_type_id = $('#unit_type').val();
         
-        if (name=="") {
-            Swal.fire({icon: 'error', title: 'Oops...',text: "Name Required!",});
-        }else if (unit_type_id=="-1") {
-            Swal.fire({icon: 'error', title: 'Oops...',text: "Pilih Unit Type Dahulu!",});
-        }else if (address=="") {
-            Swal.fire({icon: 'error', title: 'Oops...',text: "Address Required!",});
-        }else{
-            let datar = {};
-            datar['_method']='POST';
-            datar['_token']=$('._token').data('token');
-            datar['name']=name;
-            datar['address']=address;
-            datar['unit_type_id']=unit_type_id;
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-            type: 'post',
-            url: $("#linked1").val(),
-            data:datar,
-            success: function(data) {
-                if (data.error==false) {
-                    table.ajax.reload();
-                    clearFormUnit();
-                    $('#addUnitModal').modal('hide');
-                    Swal.fire({icon: 'success', title: 'Horray...',text: data.message});
-                }else{
-                    Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: data.message,
-                    });
-                }
-            },
-            });
-        }
-    } 
+    //     if (name=="") {
+    //         Swal.fire({icon: 'error', title: 'Oops...',text: "Name Required!",});
+    //     }else if (unit_type_id=="-1") {
+    //         Swal.fire({icon: 'error', title: 'Oops...',text: "Pilih Unit Type Dahulu!",});
+    //     }else if (address=="") {
+    //         Swal.fire({icon: 'error', title: 'Oops...',text: "Address Required!",});
+    //     }else{
+    //         let datar = {};
+    //         datar['_method']='POST';
+    //         datar['_token']=$('._token').data('token');
+    //         datar['name']=name;
+    //         datar['address']=address;
+    //         datar['unit_type_id']=unit_type_id;
+    //         $.ajaxSetup({
+    //             headers: {
+    //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //             }
+    //         });
+    //         $.ajax({
+    //         type: 'post',
+    //         url: $("#linked1").val(),
+    //         data:datar,
+    //         success: function(data) {
+    //             if (data.error==false) {
+    //                 table.ajax.reload();
+    //                 clearFormUnit();
+    //                 $('#addUnitModal').modal('hide');
+    //                 Swal.fire({icon: 'success', title: 'Horray...',text: data.message});
+    //             }else{
+    //                 Swal.fire({
+    //                 icon: 'error',
+    //                 title: 'Oops...',
+    //                 text: data.message,
+    //                 });
+    //             }
+    //         },
+    //         });
+    //     }
+    // } 
 
-    function updateUnit() {
-        let id = $('input[id=e_id').val();
-        let name = $('input[id=e_name').val();
-        let address = $('textarea#e_address').val();        
-        let unit_type_id = $('#e_unit_type').val();
+    // function updateUnit() {
+    //     let id = $('input[id=e_id').val();
+    //     let name = $('input[id=e_name').val();
+    //     let address = $('textarea#e_address').val();        
+    //     let unit_type_id = $('#e_unit_type').val();
         
-        if (name=="") {
-            Swal.fire({icon: 'error', title: 'Oops...',text: "Name Required!",});
-        }else if (unit_type_id=="-1") {
-            Swal.fire({icon: 'error', title: 'Oops...',text: "Pilih Unit Type Dahulu!",});
-        }else if (address=="") {
-            Swal.fire({icon: 'error', title: 'Oops...',text: "Address Required!",});
-        }else{
-            let datar = {};
-            datar['_method']='POST';
-            datar['_token']=$('._token').data('token');
-            datar['id']=id;
-            datar['name']=name;
-            datar['address']=address;
-            datar['unit_type_id']=unit_type_id;
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-            type: 'post',
-            url: $("#linked2").val(),
-            data:datar,
-            success: function(data) {
-                if (data.error==false) {
-                    table.ajax.reload();
-                    clearEditFormUnit();
-                    $('#editUnitModal').modal('hide');
-                    Swal.fire({icon: 'success', title: 'Horray...',text: data.message});
-                }else{
-                    Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: data.message,
-                    });
-                }
-            },
-            });
-        }
-    } 
+    //     if (name=="") {
+    //         Swal.fire({icon: 'error', title: 'Oops...',text: "Name Required!",});
+    //     }else if (unit_type_id=="-1") {
+    //         Swal.fire({icon: 'error', title: 'Oops...',text: "Pilih Unit Type Dahulu!",});
+    //     }else if (address=="") {
+    //         Swal.fire({icon: 'error', title: 'Oops...',text: "Address Required!",});
+    //     }else{
+    //         let datar = {};
+    //         datar['_method']='POST';
+    //         datar['_token']=$('._token').data('token');
+    //         datar['id']=id;
+    //         datar['name']=name;
+    //         datar['address']=address;
+    //         datar['unit_type_id']=unit_type_id;
+    //         $.ajaxSetup({
+    //             headers: {
+    //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //             }
+    //         });
+    //         $.ajax({
+    //         type: 'post',
+    //         url: $("#linked2").val(),
+    //         data:datar,
+    //         success: function(data) {
+    //             if (data.error==false) {
+    //                 table.ajax.reload();
+    //                 clearEditFormUnit();
+    //                 $('#editUnitModal').modal('hide');
+    //                 Swal.fire({icon: 'success', title: 'Horray...',text: data.message});
+    //             }else{
+    //                 Swal.fire({
+    //                 icon: 'error',
+    //                 title: 'Oops...',
+    //                 text: data.message,
+    //                 });
+    //             }
+    //         },
+    //         });
+    //     }
+    // } 
 
-    $(document).on('click', '.editUnitBtn', function () {
+    $(document).on('click', '.addPengajuanMutasiBtn', function () {
         // Ambil data dari atribut tombol
-        var id = $(this).data('id');
-        var name = $(this).data('name');
-        var address = $(this).data('address');
-        var unit_type_id = $(this).data('unit_type_id');
+        var unit_id = $(this).data('unit_id');
+        var unit_name = $(this).data('unit_name');
+        var unit_address = $(this).data('unit_address');
+        var position_id = $(this).data('position_id');
+        var position_name = $(this).data('position_name');
+        var allocation = $(this).data('allocation');
+        var a_unit_id = $(this).data('a_unit_id');
+        var a_unit_name = $(this).data('a_unit_name');
+        var a_unit_address = $(this).data('a_unit_address');
+        var a_position_id = $(this).data('a_position_id');
+        var a_position_name = $(this).data('a_position_name');
         
         // Set data ke form dalam modal
-        $('#editUnitModal input[id="e_id"]').val(id);
-        $('#editUnitModal input[id="e_name"]').val(name);
-        $('#editUnitModal textarea#e_address').val(address);
-        $('#editUnitModal select[id="e_unit_type"]').val(unit_type_id);        
+        $('#addPengajuanMutasiModal select[id="a_unit_name"]').val(a_unit_id);
+        $('#addPengajuanMutasiModal input[id="a_address"]').val(a_unit_address);
+        $('#addPengajuanMutasiModal select[id="a_position"]').val(a_position_id);
+
+        $('#addPengajuanMutasiModal select[id="t_unit_name"]').val(unit_id);
+        $('#addPengajuanMutasiModal input[id="t_address"]').val(unit_address);
+        $('#addPengajuanMutasiModal select[id="t_position"]').val(position_id);
+        $('#addPengajuanMutasiModal input[id="t_allocation"]').val(allocation);
+        // $('#editUnitModal select[id="e_unit_type"]').val(unit_type_id);        
     });
+</script>
+<script>
+    function clearForm() {
+        document.getElementById('keterangan').value='';
+        document.getElementById('file').value='';
+    } 
 </script>
 @endsection
