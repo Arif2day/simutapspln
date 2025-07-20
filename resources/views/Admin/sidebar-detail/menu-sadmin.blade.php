@@ -39,7 +39,7 @@
     </div>
 </li>
 
-<li class="nav-item {{ request()->is('layanan*') ? 'active' : '' }}">
+{{-- <li class="nav-item {{ request()->is('layanan*') ? 'active' : '' }}">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayanan"
         aria-expanded="true" aria-controls="collapseLayanan">
         <i class="fas fa-fw fa-hands"></i>
@@ -56,7 +56,7 @@
             </a>
         </div>
     </div>
-</li>
+</li> --}}
 
 
 
