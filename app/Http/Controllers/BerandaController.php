@@ -10,21 +10,21 @@ use App\Models\Users;
 class BerandaController extends Controller
 {
     public function index() {   
-        $host = 'gondola.proxy.rlwy.net';
-        $port = '55038';
-        $db   = 'railway';
-        $user = 'root';
-        $pass = 'QDHnquGvLYCboTfXkGZzeTYnHeBnnjNR';
+        // $host = 'gondola.proxy.rlwy.net';
+        // $port = '55038';
+        // $db   = 'railway';
+        // $user = 'root';
+        // $pass = 'QDHnquGvLYCboTfXkGZzeTYnHeBnnjNR';
 
-        try {
-            $pdo = new \PDO("mysql:host=$host;port=$port;dbname=$db", $user, $pass);
-            echo "✅ Koneksi ke database berhasil.";
-        } catch (\PDOException $e) {
-            echo "❌ Koneksi gagal: " . $e->getMessage();
-        }     
-        // $user = Users::all();
-        // dd($user);
-        // $return = array();
-        // return view("Guest.beranda.index", compact([]));
+        // try {
+        //     $pdo = new \PDO("mysql:host=$host;port=$port;dbname=$db", $user, $pass);
+        //     echo "✅ Koneksi ke database berhasil.";
+        // } catch (\PDOException $e) {
+        //     echo "❌ Koneksi gagal: " . $e->getMessage();
+        // }     
+        $user = Users::all();
+        dd($user);
+        $return = array();
+        return view("Guest.beranda.index", compact([]));
     }
 }
