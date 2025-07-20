@@ -66,6 +66,50 @@
                     </div>
                 </div>
             </div>
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Current Employee Placement</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-xl-3 col-md-6 col-sm-6 col-4">Unit</div>
+                        <div class="col-xl-9 col-md-6 col-sm-6 col-8" id="v_fname">: {{$resu->latestPlacement->getUnit->name}}</div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-xl-3 col-md-6 col-sm-6 col-4">Position</div>
+                        <div class="col-xl-9 col-md-6 col-sm-6 col-8" id="v_email">: {{$resu->latestPlacement->getPosition->title}}</div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-xl-3 col-md-6 col-sm-6 col-4">Placement Begin</div>
+                        <div class="col-xl-9 col-md-6 col-sm-6 col-8" id="v_phone">: {{$resu->latestPlacement->placement_start}}</div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-xl-3 col-md-6 col-sm-6 col-4">Placement Status</div>
+                        <div class="col-xl-9 col-md-6 col-sm-6 col-8" id="v_phone">: {{$resu->latestPlacement->status==1?"Aktif":"Nonaktif"}}</div>
+                    </div>
+                    <div class="row mt-2">
+                        {{-- <div class="col-xl-3 col-md-6 col-sm-6 col-4">Role As</div>
+                        <div class="col-xl-9 col-md-6 col-sm-6 col-8">:
+                            {{$resu->nama_role}}
+                        </div> --}}
+                    </div>
+                    <div class="row mt-4">
+                        {{-- <button class="btn btn-sm btn-info m-2">
+                            Ubah Password
+                        </button> --}}
+                        {{-- <button type="button" class="btn btn-info btn-sm m-2" data-toggle="modal"
+                            data-target="#ubahPasswordModal">
+                            Ubah Password
+                        </button>
+                        <button type="button" class="btn btn-sm btn-info m-2" data-toggle="modal"
+                            data-target="#ubahProfilModal">
+                            Ubah Profil
+                        </button> --}}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

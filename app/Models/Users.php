@@ -35,6 +35,21 @@ class Users extends EloquentUser
       return $this->belongsTo('App\Models\Roles', 'role_id');    
     }
 
+    public function getPlacements()
+    {
+        return $this->hasMany(UserPlacements::class, 'user_id', 'id');
+    }
+
+    public function latestPlacement()
+    {
+        return $this->hasOne(UserPlacements::class, 'user_id')->latestOfMany();
+    }
+
+    public function getUnits()
+    {
+        return $this->belongsTo('App\Models\Units', 'unit_id');    
+    }
+
     public function getNamaRoleAttribute()
     {
         return $this->getRoleUser->getRole->name;
@@ -50,4 +65,8 @@ class Users extends EloquentUser
         return $this->first_name.' '.$this->last_name;
     }
 
+    public function uploadedDocuments()
+    {
+        return $this->hasMany(ApsDocuments::class, 'uploaded_by');
+    }
 }

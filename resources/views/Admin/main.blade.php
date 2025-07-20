@@ -10,7 +10,7 @@
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>SIPP</title>
+    <title>SIMUTAPSPLN</title>
 
     <!-- Custom fonts for this template-->
     {!!Html::style('vendor/fontawesome-free/css/all.min.css')!!}
@@ -71,15 +71,14 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center mb-2">
-                        <strong><span class="text-primary">SELAMAT DATANG,
-                                {{Sentinel::getUser()->username}} -
+                        <strong><span class="text-primary">SELAMAT DATANG -
                                 {{Str::upper(Sentinel::getUser()->first_name)}}                               
                                 [{{ Sentinel::getUser()->nama_role }}]
                             </span>
                         </strong>
                     </div>
                     <div class="copyright text-center my-auto">
-                        <span>COPYRIGHT &copy; SIPP {{ now()->year }}</span>
+                        <span>COPYRIGHT &copy; SIMUTAPSPLN {{ now()->year }}</span>
                     </div>
                 </div>
             </footer>

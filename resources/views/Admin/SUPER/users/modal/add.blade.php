@@ -4,7 +4,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addUserModalLabel">Add User</h5>
+                    <h5 class="modal-title" id="addUserModalLabel">Add Employee</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"
                         onclick="clearFormUser()">
                         <span aria-hidden="true">&times;</span>
@@ -27,6 +27,10 @@
                         <div class="form-group">
                             <label for="p_hone" class="col-form-label">Phone:</label>
                             <input type="text" class="form-control" id="p_hone" value="" maxlength="15">
+                        </div>
+                        <div class="form-group">
+                            <label for="birthdate" class="col-form-label">Birthdate:</label>
+                            <input type="date" class="form-control" id="birthdate" value="" maxlength="15">
                         </div>
                         <div class="form-group">
                             <label for="role_insert" class="col-form-label">Role:</label>

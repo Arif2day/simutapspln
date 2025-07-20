@@ -4,7 +4,7 @@
             <div class="col-lg-4">
                 <div class="px-2">
                     <div class="footer-title d-flex">
-                        <h4 class="pb-3 font-weight-bold text-white">Pengadilan Negeri Negara Kelas II</h4>
+                        <h4 class="pb-3 font-weight-bold text-white">Perusahaan Listrik Negara</h4>
                     </div>
 
                     <dl class="row mb-0">

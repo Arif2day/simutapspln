@@ -64,17 +64,12 @@ class UserController extends Controller
   {
     if ($user = Sentinel::getUser())
     {
-        if ($user->inRole('mahasiswa'))
-        {
-            return view('Error.404');
-        }else{
           $userprofile = Sentinel::getUser();
-          $uu = Users::where('id','=',$userprofile->id)->get();
+          $uu = Users::with(['roles','getPlacements','latestPlacement.getUnit'])->where('id','=',$userprofile->id)->get();
           return view('Admin.profile.index',array(
             'res'=>$userprofile,
             'resu'=>$uu[0]
           ));     
-        }
     }
 
   }

@@ -19,7 +19,7 @@
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>SIPP - Login</title>
+    <title>SIMUTAPSPLN - Login</title>
 
     <!-- Custom fonts for this template-->
     {!!Html::style('vendor/fontawesome-free/css/all.min.css')!!}
@@ -73,7 +73,7 @@
                             <div class="col-lg-6">
                                 <div class="p-lg-5">
                                     <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">SIPP LOGIN!</h1>
+                                        <h1 class="h4 text-gray-900 mb-4">SIMUTAPSPLN LOGIN!</h1>
                                     </div>
                                     <form class="user">
                                         <div class="form-group">

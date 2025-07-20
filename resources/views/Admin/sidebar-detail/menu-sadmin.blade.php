@@ -4,17 +4,64 @@
     }}">
     <a class="nav-link" href="{{url('user-manager')}}">
         <i class="fas fa-fw fa-users"></i>
-        <span>User Manager</span></a>
+        <span>Employee Manager</span></a>
 </li>
 
 <!-- Divider -->
-{{-- <hr class="sidebar-divider"> --}}
+<hr class="sidebar-divider">
 <!-- Heading -->
-{{-- <div class="sidebar-heading">
-    SYNC
+<div class="sidebar-heading">
+    MASTER
 </div>
 
-<li class="nav-item {{ 
+<li class="nav-item {{ request()->is('master*') ? 'active' : '' }}">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMaster"
+        aria-expanded="true" aria-controls="collapseMaster">
+        <i class="fas fa-fw fa-database"></i>
+        <span>Master Data</span>
+    </a>
+    <div id="collapseMaster" class="collapse {{ request()->is('master*') ? 'show' : '' }}"
+        data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+            <a class="collapse-item {{ request()->is('master/employee-status') ? 'active' : '' }}" href="{{ url('master/employee-status') }}">
+                Employee Status
+            </a>
+            <a class="collapse-item {{ request()->is('master/positions') ? 'active' : '' }}" href="{{ url('master/positions') }}">
+                Positions
+            </a>
+            <a class="collapse-item {{ request()->is('master/units') ? 'active' : '' }}" href="{{ url('master/units') }}">
+                Units
+            </a>
+            <a class="collapse-item {{ request()->is('master/unit-types') ? 'active' : '' }}" href="{{ url('master/unit-types') }}">
+                Unit Types
+            </a>
+        </div>
+    </div>
+</li>
+
+<li class="nav-item {{ request()->is('layanan*') ? 'active' : '' }}">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayanan"
+        aria-expanded="true" aria-controls="collapseLayanan">
+        <i class="fas fa-fw fa-hands"></i>
+        <span>Layanan</span>
+    </a>
+    <div id="collapseLayanan" class="collapse {{ request()->is('layanan*') ? 'show' : '' }}"
+        data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+            <a class="collapse-item {{ request()->is('layanan/users') ? 'active' : '' }}" href="{{ url('layanan/users') }}">
+                Layanan Mutasi
+            </a>
+            <a class="collapse-item {{ request()->is('layanan/roles') ? 'active' : '' }}" href="{{ url('layanan/roles') }}">
+                Layanan -
+            </a>
+        </div>
+    </div>
+</li>
+
+
+
+
+{{-- <li class="nav-item {{ 
 request()->is('sync') ? 'active' : '' 
 }}">
     <a class="nav-link" href="{{url('sync')}}">

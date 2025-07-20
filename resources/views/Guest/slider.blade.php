@@ -7,13 +7,13 @@
     </ol>
     <div class="carousel-inner">
       <div class="carousel-item active">
-        <img src="https://kanerika.com/wp-content/uploads/2025/04/New-Blog-Banner-34.jpg.webp" class="d-block w-100" alt="Banner 1">
+        <img src="https://assets-a1.kompasiana.com/items/album/2016/04/20/web-banner-pln-855x285px-01-5716e294507a613e048b4574.jpg?t=o&v=1200" class="d-block w-100" alt="Banner 1">
       </div>
       <div class="carousel-item">
-        <img src="https://home.sec.gov.ng/media/images/Our_Principles.format-avif.width-1200_BLrC2cp.avif" class="d-block w-100" alt="Banner 2">
+        <img src="https://cdn.brandfetch.io/idCQtgViQE/w/1500/h/500/idlEP7QZKB.jpeg?c=1bxid64Mup7aczewSAYMX&t=1744882522522" class="d-block w-100" alt="Banner 2">
       </div>
       <div class="carousel-item">
-        <img src="https://www.ehn.org/media-library/climate-justice.jpg?id=27364212&width=1200&height=600&quality=85&coordinates=0%2C181%2C0%2C154" class="d-block w-100" alt="Banner 3">
+        <img src="https://cdn.brandfetch.io/idjtLBUGJd/w/1500/h/500/idel7lZTuO.jpeg?c=1bxid64Mup7aczewSAYMX&t=1748077074734" class="d-block w-100" alt="Banner 3">
       </div>
     </div>
     <a class="carousel-control-prev" href="#main-carousel" role="button" data-slide="prev">

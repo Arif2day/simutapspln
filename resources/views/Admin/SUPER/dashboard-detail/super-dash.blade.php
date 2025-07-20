@@ -100,7 +100,7 @@
         <div class="card shadow mb-4">
             <!-- Card Header - Dropdown -->
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">AKM Program Studi Tahun Akademik</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Progres Permohonan Mutasi APS</h6>
                 <select name="periode" id="periode">
                     @foreach ($periode as $item)
                     <option value="{{$item->id_semester}}">{{$item->nama_semester}}</option>
@@ -131,7 +131,7 @@
         <div class="card shadow mb-4">
             <!-- Card Header - Dropdown -->
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Mahasiswa Aktif Prodi</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Permohonan Mutasi APS Aktif</h6>
             </div>
             <!-- Card Body -->
             <div class="card-body">

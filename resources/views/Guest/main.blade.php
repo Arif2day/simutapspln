@@ -10,7 +10,7 @@
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>SIPP</title>
+    <title>SIMUTAPSPLN</title>
 
     <!-- Custom fonts for this template-->
     {!!Html::style('vendor/fontawesome-free/css/all.min.css')!!}
@@ -165,15 +165,15 @@
                     <div class="d-flex align-items-center">
                         <img src="{{ asset('img/court.png') }}" alt="Logo" height="110" class="me-4">
                         <div>
-                            <h1 class="ml-3 h4 mb-1 text-primary"><b>Pengadilan Negeri Negara Kelas II</b></h1>
-                            <h1 class="ml-3 h5 mb-0 text-primary"><b>Evelin</b></h1>
+                            <h1 class="ml-3 h4 mb-1 text-primary"><b>Sistem Mutasi APS</b></h1>
+                            <h1 class="ml-3 h5 mb-0 text-primary"><b>Perusahaan Listrik Negara</b></h1>
                         </div>
                     </div>
                 
                     <!-- Kanan: Logo BerAKHLAK -->
                     <div class="mt-3 mt-md-0">
-                        <img src="https://pn-kepanjen.go.id/assets/global/images/berakhlak-bangga-melayani-bangsa.png" 
-                            alt="BerAKHLAK" 
+                        <img src="https://assets.kompasiana.com/statics/crawl/552887e36ea83443058b456b.png?t=o&v=300" 
+                            alt="PLNBersihNoSuap" 
                             height="70" 
                             class="img-fluid ms-md-4">
                     </div>
@@ -198,12 +198,12 @@
             <footer class="sticky-footer bg-primary" style="background-color: #000e2b !important">
                 <div class="container my-auto">
                     <div class="copyright text-center mb-2">
-                        <strong><span class="text-primary">SELAMAT DATANG DI PENGADILAN NEGERI NEGARA KELAS II                            
+                        <strong><span class="text-primary">SELAMAT DATANG DI SISTEM MUTASI APS                            
                             </span>
                         </strong>
                     </div>
                     <div class="copyright text-center my-auto">
-                        <span>COPYRIGHT &copy; PENGADILAN NEGERI NEGARA KELAS II {{ now()->year }}</span>
+                        <span>COPYRIGHT &copy; PERUSAHAAN LISTRIK NEGARA {{ now()->year }}</span>
                         <a href="{{ url('/login') }}">.</a>
                     </div>
                 </div>
@@ -291,7 +291,7 @@
         const chart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Masuk', 'Diputus', 'Sisa', 'Eksekusi'],
+                labels: ['Masuk', 'Ditolak', 'Disetujui', 'Dalam Proses'],
                 datasets: [{
                     label: 'Jumlah Perkara',
                     data: [215, 198, 17, 8],

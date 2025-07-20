@@ -2,8 +2,44 @@
 
 namespace App\Helpers;
 
+use DateTime;
+
 class CustomFormat{
     
+    public static function cekStatusPensiun($dob)
+    {
+        $birthDate = new DateTime($dob);
+        $now = new DateTime();
+    
+        $umur = $birthDate->diff($now);
+        $umurTahun = $umur->y;
+        $umurBulan = $umur->m;
+    
+        // Hitung tanggal ulang tahun ke-56
+        $retirement56 = (clone $birthDate)->modify('+56 years');
+    
+        // Hitung umur dalam minggu/hari jika mendekati pensiun
+        if ($umurTahun === 55 && $umurBulan >= 9) {
+            $daysLeft = $now->diff($retirement56)->days;
+            $weeksLeft = floor($daysLeft / 7);
+            return [
+                'status' => 'akan_pensiun',
+                'weeks_left' => $weeksLeft,
+                'days_left' => $daysLeft,
+                'retirement_date' => $retirement56->format('Y-m-d'),
+            ];
+        }
+    
+        // Sudah lewat 60 tahun
+        if ($umurTahun >= 60) {
+            return ['status' => 'sudah_pensiun'];
+        }
+    
+        // Selain itu
+        return ['status' => 'belum_mendekati'];
+    }
+    
+
     public static function tgl_indo($tanggal){
         $bulan = array (
           1 =>   'Januari',

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Users;
-use App\Models\UserAdmin;
 use App\Helpers\customFormat;
 use App\Helpers\AKMHelper;
 use App\Helpers\LulusanHelper;

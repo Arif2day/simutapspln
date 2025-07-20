@@ -7,6 +7,12 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PenelusuranPerkaraController;
 use App\Http\Controllers\BerandaController;
 use App\Http\Controllers\Super\UserManagerController;
+use App\Http\Controllers\Super\PositionController;
+use App\Http\Controllers\Super\UnitTypeController;
+use App\Http\Controllers\Super\UnitController;
+use App\Http\Controllers\Super\EmployeeStatusController;
+use App\Http\Controllers\Peserta\PermohonanMutasiController;
+use App\Http\Controllers\Peserta\ApsRequestController;
 
 Sentinel::disableCheckpoints();
 /*
@@ -57,6 +63,17 @@ Route::group(['middleware' => 'sentinelmember'], function(){
 		Route::post('/periode-lulus-by-prodi', [DashboardController::class,'getChartKAByPeriodeLulus']);
 		Route::get('/test',[DashboardController::class,'test']);
 	});
+
+	Route::group(['prefix'=>'permohonan-mutasi'],function(){
+		Route::group(['prefix'=>'permohonan'],function(){
+			Route::get('/', [PermohonanMutasiController::class,'index']);
+			Route::post('//list', [PermohonanMutasiController::class,'getMutationAvailabilityList']);
+		});
+		Route::group(['prefix'=>'riwayat'],function(){
+			Route::get('/', [ApsRequestController::class,'index']);
+			Route::post('//list', [ApsRequestController::class,'getApsRequestList']);
+		});
+	});
 	
 
 	Route::get('user-profile',[UserController::class,'userProfile']);
@@ -69,13 +86,48 @@ Route::group(['middleware' => 'sentinelmember'], function(){
 
 
 Route::group(['middleware' => 'SAmember'],function(){	
-
+	Route::group(['prefix' => 'master'], function(){
+		Route::group(['prefix' => 'positions'], function(){
+			Route::get('/', [PositionController::class,'index']);
+			Route::post('/list', [PositionController::class,'getPositionList']);
+			Route::post('/',[PositionController::class,'store']);
+			Route::post('/update',[PositionController::class,'update']);
+			Route::delete('', [PositionController::class,'destroy']);
+		});
+		Route::group(['prefix' => 'employee-status'], function(){
+			Route::get('/', [EmployeeStatusController::class,'index']);
+			Route::post('/list', [EmployeeStatusController::class,'getEmployeeStatusList']);
+			Route::post('/',[EmployeeStatusController::class,'store']);
+			Route::post('/update',[EmployeeStatusController::class,'update']);
+			Route::delete('', [EmployeeStatusController::class,'destroy']);
+		});
+		Route::group(['prefix' => 'unit-types'], function(){
+			Route::get('/', [UnitTypeController::class,'index']);
+			Route::post('/list', [UnitTypeController::class,'getUnitTypeList']);
+			Route::post('/',[UnitTypeController::class,'store']);
+			Route::post('/update',[UnitTypeController::class,'update']);
+			Route::delete('', [UnitTypeController::class,'destroy']);
+		});
+		Route::group(['prefix' => 'units'], function(){
+			Route::get('/', [UnitController::class,'index']);
+			Route::post('/list', [UnitController::class,'getUnitList']);
+			Route::post('/',[UnitController::class,'store']);
+			Route::post('/update',[UnitController::class,'update']);
+			Route::delete('', [UnitController::class,'destroy']);
+		});
+	});
 	Route::group(['prefix' => 'user-manager'], function(){
 			Route::get('/', [UserManagerController::class,'index']);
 			Route::post('/list', [UserManagerController::class, 'getUsers']);
 			Route::post('/',[UserManagerController::class,'store']);
 			Route::post('/update',[UserManagerController::class,'update']);
 			Route::delete('', [UserManagerController::class,'destroy']);
+			Route::group(['prefix' => 'placement'], function(){
+				Route::post('/list', [UserManagerController::class, 'getUserPlacements']);
+				Route::post('/',[UserManagerController::class,'storePlacement']);
+				Route::post('/update',[UserManagerController::class,'updatePlacement']);
+				Route::delete('', [UserManagerController::class,'destroyPlacement']);
+			});
 	});
 });
 
