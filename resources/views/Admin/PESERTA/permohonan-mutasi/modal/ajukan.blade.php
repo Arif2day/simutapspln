@@ -108,7 +108,7 @@
                             <div class="btn-group mr-4">
                               <button type="button" class="btn btn-secondary"
                               onclick="clearForm()">Clear</button>
-                              <button type="button" class="btn btn-info" id="btnModeSimpan" onclick="saveDetailUser()">Upload</button>
+                              <button type="button" class="btn btn-info" id="btnSavePerngajuanMutasi" onclick="uploadDokumen()">Upload</button>
                             </div>
                           </div>
                         </form>
