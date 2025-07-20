@@ -17,9 +17,9 @@ class BerandaController extends Controller
         $pass = 'QDHnquGvLYCboTfXkGZzeTYnHeBnnjNR';
 
         try {
-            $pdo = new PDO("mysql:host=$host;port=$port;dbname=$db", $user, $pass);
+            $pdo = new \PDO("mysql:host=$host;port=$port;dbname=$db", $user, $pass);
             echo "✅ Koneksi ke database berhasil.";
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             echo "❌ Koneksi gagal: " . $e->getMessage();
         }     
         // $user = Users::all();
