@@ -18,7 +18,7 @@ class PermohonanMutasiController extends Controller
     public function index() {     
         $units = Units::all();   
         $positions = Positions::all();   
-        return view('Admin.Peserta.permohonan-mutasi.index',compact(['units','positions']));
+        return view('Admin.PESERTA.permohonan-mutasi.index',compact(['units','positions']));
     }
 
     public function getMutationAvailabilityList(Request $req) {
