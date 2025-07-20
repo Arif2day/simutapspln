@@ -222,18 +222,18 @@
     </a>
 
     <!-- Bootstrap core JavaScript-->
-    {!!Html::script('vendor/jquery/jquery.min.js')!!}
-    {!!Html::script('vendor/bootstrap/js/bootstrap.bundle.min.js')!!}
+    {!!Html::script(secure_asset('vendor/jquery/jquery.min.js'))!!}
+    {!!Html::script(secure_asset('vendor/bootstrap/js/bootstrap.bundle.min.js'))!!}
 
     <!-- Core plugin JavaScript-->
-    {!!Html::script('vendor/jquery-easing/jquery.easing.min.js')!!}
+    {!!Html::script(secure_asset('vendor/jquery-easing/jquery.easing.min.js'))!!}
 
     <!-- Custom scripts for all pages-->
-    {!!Html::script('js/sb-admin-2.min.js')!!}
+    {!!Html::script(secure_asset('js/sb-admin-2.min.js'))!!}
 
     <!-- Page level plugins -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    {{-- {!!Html::script('vendor/chart.js/Chart.min.js')!!} --}}
+    {{-- {!!Html::script(secure_asset('vendor/chart.js/Chart.min.js'))!!} --}}
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Include a polyfill for ES6 Promises (optional) for IE11 -->
     <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.js"></script>
@@ -251,9 +251,9 @@
     <script src="https://cdn.datatables.net/fixedcolumns/3.2.1/js/dataTables.fixedColumns.min.js"></script>
 
 
-    {!!Html::script('js/Event.js')!!}
-    {!!Html::script('js/Magnifier.js')!!}
-    {!!Html::script('js/bootstrap-datepicker.js')!!}
+    {!!Html::script(secure_asset('js/Event.js'))!!}
+    {!!Html::script(secure_asset('js/Magnifier.js'))!!}
+    {!!Html::script(secure_asset('js/bootstrap-datepicker.js'))!!}
     <script>
         let lastScrollTop = 0;
         const header = document.getElementById('main-header');
