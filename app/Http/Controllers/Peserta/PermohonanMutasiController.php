@@ -8,6 +8,9 @@ use App\Models\UserPlacements;
 use App\Models\Users;
 use App\Models\Units;
 use App\Models\Positions;
+use App\Models\ApsRequests;
+use App\Models\ApsDocuments;
+use App\Helpers\ImageHelper;
 
 use DataTables;
 use Carbon\Carbon;
@@ -46,6 +49,7 @@ class PermohonanMutasiController extends Controller
                     'position_id' => $item->position_id,
                     'position_name' => optional($item->getPosition)->title,
                     'total' => $item->total,
+                    'user_id' =>$user->id,
                     'a_unit_id' =>$user->latestPlacement->unit_id,
                     'a_unit_name' =>$user->latestPlacement->getUnit->name,
                     'a_unit_address' =>$user->latestPlacement->getUnit->address,
@@ -65,6 +69,7 @@ class PermohonanMutasiController extends Controller
                     'data-position_id="'.$row['position_id'].'"'.
                     'data-position_name="'.$row['position_name'].'"'.
                     'data-allocation="'.$row['total'].'"'.
+                    'data-user_id="'.$row['user_id'].'"'.
                     'data-a_unit_id="'.$row['a_unit_id'].'"'.
                     'data-a_unit_name="'.$row['a_unit_name'].'"'.
                     'data-a_unit_address="'.$row['a_unit_address'].'"'.
@@ -79,5 +84,58 @@ class PermohonanMutasiController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
           }
+    }
+
+    public function store(Request $request) {
+        $res['error']=false;
+        $res['message']="";
+        $res['data']='';
+
+        $documents = json_decode($request->input('documents'), true);
+
+        try {
+            $mode = $request->mode_simpan;
+            $prev_step = "pemohon";
+            $next_step = $mode=="draft"?"pemohon":"bpo_asal";
+            // save as draft/submitted
+            $data = new ApsRequests();  
+            $data->user_id = $request->user_id;
+            $data->status = $mode;
+            $data->prev_step = $prev_step;
+            $data->next_step = $next_step;
+            $data->unit_id_to = $request->unit_id_to;
+            $data->unit_id_from = $request->unit_id_from;
+            $data->position_id_to = $request->position_id_to;
+            $data->position_id_from = $request->position_id_from;
+            $data->user_id = $request->user_id;
+            if($data->save()){
+                foreach ($documents as $key => $doc) {
+                    $imageData = (object)[
+                        'path' => 'documents/',
+                        'uniqid' => "documents",
+                        'image' => $doc['url'],
+                      ];
+                    $imgPath = ImageHelper::uploadImage($imageData);
+
+                    $adoc = new ApsDocuments();
+                    $adoc->aps_request_id =  $data->id;
+                    $adoc->document_type =  "permohonan";
+                    $adoc->document_name = $doc['note'];
+                    $adoc->file_path = $imgPath;
+                    $adoc->uploaded_by = $request->user_id;
+                    $adoc->uploaded_at = Carbon::today();
+                    $adoc->save();
+                }          
+            $res['message']="Permohonan mutasi saved successfully.";
+            }else{
+            $res['error']=true;
+            $res['message']="Permohonan mutasi failed to save!";
+            }
+        } catch (\Exception $e) {
+            $res['error']=true;
+            $res['message']=$e->getMessage();
+        }
+                
+        return response()->json($res);
     }
 }

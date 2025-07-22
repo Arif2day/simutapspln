@@ -291,6 +291,7 @@
 
     $(document).on('click', '.addPengajuanMutasiBtn', function () {
         // Ambil data dari atribut tombol
+        var user_id = $(this).data('user_id');
         var unit_id = $(this).data('unit_id');
         var unit_name = $(this).data('unit_name');
         var unit_address = $(this).data('unit_address');
@@ -312,13 +313,129 @@
         $('#addPengajuanMutasiModal input[id="t_address"]').val(unit_address);
         $('#addPengajuanMutasiModal select[id="t_position"]').val(position_id);
         $('#addPengajuanMutasiModal input[id="t_allocation"]').val(allocation);
-        // $('#editUnitModal select[id="e_unit_type"]').val(unit_type_id);        
+
+        $('#addPengajuanMutasiModal input[id="user_id"]').val(user_id);        
     });
 </script>
 <script>
+    let documents = [];
+
+    function uploadDokumen() {
+        const fileInput = document.getElementById('fileInput');
+        const noteInput = document.getElementById('keterangan');
+
+        if (!fileInput.files.length) {
+            alert("Pilih file terlebih dahulu");
+            return;
+        }
+
+        const file = fileInput.files[0];
+        const note = noteInput.value;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const url = e.target.result;
+            const fileName = file.name;
+
+            documents.push({ url, note, fileName });
+
+            renderTable();
+            fileInput.value = '';
+            noteInput.value = '';
+        };
+
+        reader.readAsDataURL(file); // base64 URL
+    }
+
     function clearForm() {
         document.getElementById('keterangan').value='';
-        document.getElementById('file').value='';
+        document.getElementById('fileInput').value='';
     } 
+
+    function renderTable() {
+        const tbody = document.querySelector(".document-datatable tbody");
+        tbody.innerHTML = "";
+
+        documents.forEach((doc, index) => {
+            const link = `<a href="${doc.url}" target="_blank">${doc.fileName}</a>`;
+
+            tbody.innerHTML += `
+                <tr>
+                    <td class="text-center">${index+1}</td>
+                    <td>${link}</td>
+                    <td class="text-center">${doc.note}</td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-danger btn-sm" onclick="deleteDoc(${index})"><i class="fa fa-trash"></i></button>
+                    </td>
+                </tr>
+            `;
+        });
+    }
+
+
+    function deleteDoc(index) {
+        documents.splice(index, 1);
+        renderTable();
+    }
+
+    function clearFormPengajuanMutasi(){        
+        clearForm();
+        documents=[];
+        renderTable();
+    }
+
+    function submitPermohonan(draftOrSubmit) {
+        if(documents.length===0){
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Dokumen masih kosong!',
+            });
+            return;
+        }
+        let user_id = $('input[id=user_id').val();
+        let unit_id_from = $('select[id=a_unit_name]').val();        
+        let position_id_from = $('select[id=a_position]').val();
+        let unit_id_to = $('select[id=t_unit_name]').val();        
+        let position_id_to = $('select[id=t_position]').val();
+        
+        let datar = {};
+        datar['_method']='POST';
+        datar['_token']=$('._token').data('token');
+        datar['user_id']=user_id;
+        datar['unit_id_from']=unit_id_from;
+        datar['position_id_from']=position_id_from;
+        datar['unit_id_to']=unit_id_to;
+        datar['position_id_to']=position_id_to;
+        datar['documents']=JSON.stringify(documents);
+        datar['mode_simpan']=draftOrSubmit;
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+        type: 'post',
+        url: $("#linked1").val(),
+        data:datar,
+        success: function(data) {
+            if (data.error==false) {
+                table.ajax.reload();
+                clearFormPengajuanMutasi();
+                $('#addPengajuanMutasiModal').modal('hide');
+                Swal.fire({icon: 'success', title: 'Horray...',text: data.message})
+                .then(() => {
+                    window.location.href = $("#linked2").val();
+                });
+            }else{
+                Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.message,
+                });
+            }
+        },
+        });
+    }
 </script>
 @endsection

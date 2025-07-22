@@ -51,8 +51,7 @@
                 <a class="collapse-item {{ request()->is('permohonan-mutasi/permohonan') ? 'active' : '' }}" href="{{ url('permohonan-mutasi/permohonan') }}">
                     Permohonan
                 </a>
-                <a class="collapse-item {{ request()->is('permohonan-mutasi/riwayat') ? 'active' : '' }}" href="#">
-                    {{-- {{ url('permohonan-mutasi/riwayat') }} --}}
+                <a class="collapse-item {{ request()->is('permohonan-mutasi/riwayat') ? 'active' : '' }}" href="{{ url('permohonan-mutasi/riwayat') }}">                    
                     Riwayat
                 </a>
             </div>

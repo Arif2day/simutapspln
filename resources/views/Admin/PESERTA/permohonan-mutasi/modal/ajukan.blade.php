@@ -43,8 +43,7 @@
                                         </select>
                                     </div>
                                 </div>                              
-                                <input type="hidden" name="unit_id" id="unit_id">
-                                <input type="hidden" name="position_id" id="position_id">
+                                <input type="hidden" name="user_id" id="user_id">
                             </form>
                         </div>
                         <div class="col-md-6">
@@ -98,9 +97,9 @@
                             </div>
                           </div>
                           <div class="form-group row">
-                            <label for="file" class="col-sm-4 col-form-label">Pilih Dokumen:</label>
+                            <label for="fileInput" class="col-sm-4 col-form-label">Pilih Dokumen:</label>
                             <div class="col-sm-8">
-                              <input type="file" class="form-control" id="file" accept=".pdf, .jpg, .jpeg, .png">
+                              <input type="file" class="form-control" id="fileInput" accept=".pdf, .jpg, .jpeg, .png">
                             </div>
                           </div>
                           <input type="hidden" name="d_id" id="d_id">
@@ -122,8 +121,8 @@
                                 <table class="table document-datatable display" style="width:100%;">
                                     <thead class="text-center">
                                         <th>NO</th>
-                                        <th>KETERANGAN</th>
                                         <th>DOKUMEN</th>
+                                        <th>KETERANGAN</th>
                                         <th>ACTION</th>
                                     </thead>
                                     <tbody></tbody>
@@ -139,12 +138,30 @@
                 </div>
 
                 <div class="modal-footer text-sm">
-                    <div class="col">
-                        <b class="text-danger">* File persyaratan yang perlu diupload:</b>
-                        <ul>
-                            <li>1. KTP</li>
-                            <li>2. KK</li>
-                        </ul>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <b class="text-danger">* File persyaratan yang perlu diupload:</b>
+                                <ul>
+                                    <li>1. KTP</li>
+                                    <li>2. KK</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <button class="btn btn-secondary" data-dismiss="modal"
+                                onclick="clearFormPengajuanMutasi()">
+                                    <i class="fa fa-times"></i> Cancel
+                                </button>
+                                <button class="btn btn-primary submitDraft" onclick="submitPermohonan('draft')">
+                                    💾 Simpan Sebagai Draft
+                                </button>
+                                <button class="btn btn-info submitPermohonan" onclick="submitPermohonan('submitted')">
+                                    🚀 Submit Permohonan
+                                </button>
+                                <input type="hidden" name="linked1" id="linked1" value="{{ url('permohonan-mutasi/permohonan') }}">
+                                <input type="hidden" name="linked2" id="linked2" value="{{ url('permohonan-mutasi/riwayat') }}">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

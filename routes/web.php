@@ -67,11 +67,12 @@ Route::group(['middleware' => 'sentinelmember'], function(){
 	Route::group(['prefix'=>'permohonan-mutasi'],function(){
 		Route::group(['prefix'=>'permohonan'],function(){
 			Route::get('/', [PermohonanMutasiController::class,'index']);
-			Route::post('//list', [PermohonanMutasiController::class,'getMutationAvailabilityList']);
+			Route::post('/',[PermohonanMutasiController::class,'store']);
+			Route::post('/list', [PermohonanMutasiController::class,'getMutationAvailabilityList']);
 		});
 		Route::group(['prefix'=>'riwayat'],function(){
 			Route::get('/', [ApsRequestController::class,'index']);
-			Route::post('//list', [ApsRequestController::class,'getApsRequestList']);
+			Route::post('/list', [ApsRequestController::class,'getApsRequestList']);
 		});
 	});
 	

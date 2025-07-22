@@ -49,10 +49,10 @@ return [
             'visibility' => 'public',
         ],
 
-        'slip' => [
+        'documents' => [
             'driver' => 'local',
-            'root' => public_path('uploads/slip'),
-            'url' => env('APP_URL').'/uploads/slip',
+            'root' => public_path('uploads/documents'),
+            'url' => env('APP_URL').'/uploads/documents',
             'visibility' => 'public',
         ],
 
