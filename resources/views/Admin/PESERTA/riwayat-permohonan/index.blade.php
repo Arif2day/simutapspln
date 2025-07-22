@@ -68,8 +68,9 @@
                         <table class="table history-datatable display" style="width:100%;">
                             <thead class="text-center">
                                 <th>NO</th>
+                                <th>PEMOHON</th>
+                                <th>CURR. UNIT NAME</th>
                                 <th>DEST. UNIT NAME</th>
-                                <th>ADDRESS</th>
                                 <th>DEST. POSITION</th>
                                 <th>STATUS</th>
                                 <th>PREV STEP</th>
@@ -132,13 +133,15 @@
             $(cells[4]).addClass('text-center text-sm')                   
             $(cells[5]).addClass('text-center text-sm')                   
             $(cells[6]).addClass('text-center text-sm')                   
-            $(cells[7]).addClass('text-sm')                   
-            $(cells[8]).addClass('text-center text-sm')                   
+            $(cells[7]).addClass('text-center text-sm')                   
+            $(cells[8]).addClass('text-sm')                   
+            $(cells[9]).addClass('text-center text-sm')                   
         },
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+            {data: 'user.nama', name: 'user.nama'},
+            {data: 'unit_from.name', name: 'unit_from.name'},
             {data: 'unit_to.name', name: 'unit_to.name'},
-            {data: 'unit_to.address', name: 'unit_to.address'},
             {data: 'position_to.title', name: 'position_to.title'},
             {data: 'status', name: 'status'},
             {data: 'prev_step', name: 'prev_step'},
