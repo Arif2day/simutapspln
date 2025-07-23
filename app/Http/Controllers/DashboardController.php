@@ -13,30 +13,19 @@ use App\Helpers\Dashboard\SADashboard;
 
 use Sentinel;
 use Illuminate\Support\Arr;
+use App\Models\Notifications;
 
 class DashboardController extends Controller
 {
     public function index()
     {
       $return = array();
-      if ($us = Sentinel::getUser())
-      {
-        if ($us->inRole('mahasiswa'))
-        {
-            }            
-        }
-        if($us->inRole('bau-admin')){
-          // $return = self::getBaDashboardData();
-        }
-        if ($us->inRole('super-admin')||$us->inRole('wakil-rektor-akademik'))
-        {
-          $return = self::getSaDashboardData();
-        }
-        if ($us->inRole('prodi-admin'))
-        {
-          // $return = self::getKaDashboardData();
-        }
-        return view("Admin.dashboard", $return);
+      if ($us = Sentinel::getUser()){
+          if ($us->inRole('super-admin')||$us->inRole('wakil-rektor-akademik')){
+            $return = self::getSaDashboardData();
+          }        
+      }
+      return view("Admin.dashboard", $return);
     }
 
     # FUNCTION TO MANAGE SADMIN DASHBOARD ======================START

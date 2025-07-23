@@ -4,9 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Cartalyst\Sentinel\Users\EloquentUser;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Auth\Authenticatable;
+// use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Users extends EloquentUser
+class Users extends EloquentUser implements AuthenticatableContract
 {
+  use Notifiable,Authenticatable;
+  
   protected $fillable =[
       	'email',
       	'password',
@@ -69,4 +75,14 @@ class Users extends EloquentUser
     {
         return $this->hasMany(ApsDocuments::class, 'uploaded_by');
     }
+
+    // public function placement()
+    // {
+    //     return $this->hasMany(UserPlacements::class, 'user_id');
+    // }
+
+    // public function roles()
+    // {
+    //     return $this->belongsToMany(Roles::class, 'user_roles', 'user_id', 'role_id');
+    // }
 }

@@ -11,10 +11,13 @@ use App\Models\Positions;
 use App\Models\ApsRequests;
 use App\Models\ApsDocuments;
 use App\Helpers\ImageHelper;
+use App\Helpers\customFormat;
+use App\Notifications\ApsRequestSubmitted;
 
 use DataTables;
 use Carbon\Carbon;
 use Sentinel;
+use DB;
 
 class PermohonanMutasiController extends Controller
 {
@@ -110,22 +113,46 @@ class PermohonanMutasiController extends Controller
             $data->user_id = $request->user_id;
             if($data->save()){
                 foreach ($documents as $key => $doc) {
-                    $imageData = (object)[
-                        'path' => 'documents/',
-                        'uniqid' => "documents",
-                        'image' => $doc['url'],
-                      ];
-                    $imgPath = ImageHelper::uploadImage($imageData);
-
+                    if(customFormat::detectFileType($doc)=="pdf"){
+                        $pdfData = (object)[
+                            'path' => 'documents/',
+                            'uniqid' => "documents",
+                            'pdf' => $doc['url'],
+                          ];
+                        $docPath = ImageHelper::uploadPDF($pdfData);
+                    }else{
+                        $imageData = (object)[
+                            'path' => 'documents/',
+                            'uniqid' => "documents",
+                            'image' => $doc['url'],
+                          ];
+                        $docPath = ImageHelper::uploadImage($imageData);
+                    }
                     $adoc = new ApsDocuments();
                     $adoc->aps_request_id =  $data->id;
                     $adoc->document_type =  "permohonan";
                     $adoc->document_name = $doc['note'];
-                    $adoc->file_path = $imgPath;
+                    $adoc->file_path = $docPath;
                     $adoc->uploaded_by = $request->user_id;
                     $adoc->uploaded_at = Carbon::today();
                     $adoc->save();
                 }          
+                // Kirim ke user yang ditentukan (misal ke role tertentu)
+                $gmUsers = DB::table('users')
+                    ->join('user_placements', 'users.id', '=', 'user_placements.user_id')
+                    ->join('role_users', 'users.id', '=', 'role_users.user_id')
+                    ->join('roles', 'role_users.role_id', '=', 'roles.id')
+                    ->where('user_placements.unit_id', $request->unit_id_from)
+                    ->where('roles.slug', 'general-manager')
+                    ->select('users.*')
+                    ->get();
+
+                foreach ($gmUsers as $userData) {
+                    $user = Sentinel::findById($userData->id);
+                    if ($user) {
+                        $user->notify(new ApsRequestSubmitted($data));
+                    }
+                }
             $res['message']="Permohonan mutasi saved successfully.";
             }else{
             $res['error']=true;

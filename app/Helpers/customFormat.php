@@ -5,7 +5,35 @@ namespace App\Helpers;
 use DateTime;
 
 class CustomFormat{
-    
+  public static function detectFileType($file)
+  {
+      // 1. Cek dari 'url' apakah ada indikasi mime type
+      if (isset($file['url'])) {
+          if (str_contains($file['url'], 'application/pdf')) {
+              return 'pdf';
+          }
+  
+          if (str_contains($file['url'], 'image/')) {
+              return 'image';
+          }
+      }
+  
+      // 2. Cek dari ekstensi file (fallback)
+      if (isset($file['fileName'])) {
+          $ext = strtolower(pathinfo($file['fileName'], PATHINFO_EXTENSION));
+          if ($ext === 'pdf') {
+              return 'pdf';
+          }
+  
+          if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'])) {
+              return 'image';
+          }
+      }
+  
+      // 3. Jika tidak diketahui
+      return 'unknown';
+  }
+  
     public static function cekStatusPensiun($dob)
     {
         $birthDate = new DateTime($dob);

@@ -37,6 +37,33 @@ class ImageHelper {
 		return 0;
 	}
 
+	public static function uploadPDF($pdfData){
+		$pdf = $pdfData->pdf;
+			if($pdf != "") {
+				$path = 'uploads/'.$pdfData->path;
+
+				$generateName = uniqid($pdfData->uniqid);
+				$storageDisk = $pdfData->uniqid;
+				$destinationPath = public_path().$path;
+
+				if (str_starts_with($pdf, 'data:application/pdf')) {
+					$base64Data = explode(',', $pdf)[1];
+					$decodedData = base64_decode($base64Data);
+				}
+
+				$fileName = $generateName.'.'.'pdf';
+				$pdfdata = Storage::disk($storageDisk)->put($fileName, $decodedData);
+				// $originalName = $generateName.'.'.$ext;
+		        // $thumbName = $generateName.'thumb'.'.'.$ext;				
+		        // $upload1 = self::saveImageThumb(file_get_contents($destinationPath.'/'.$fileName), $thumbName, $path);
+		        if($pdfdata){
+		        	// return $path.$thumbName;
+		        	return $path.$fileName;
+		        }
+			}
+		return 0;
+	}
+
 
 	static function getMIMETYPE($uri){
 	    $img = explode(',', $uri);

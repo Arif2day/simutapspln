@@ -5,6 +5,12 @@ namespace App\Http\Controllers\Peserta;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ApsRequests;
+use App\Models\Users;
+use App\Models\Notifications;
+use App\Notifications\ApsRequestSubmitted;
+use App\Helpers\NotificationHelper;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 use DataTables;
 
@@ -36,8 +42,8 @@ class ApsRequestController extends Controller
                     // 'data-a_position_id="'.$row['a_position_id'].'"'.
                     // 'data-a_position_name="'.$row['a_position_name'].'"'.
                     ' data-toggle="modal"'.
-                    ' data-target="#addPengajuanMutasiModal" disabled'.                   
-                        '><i class="fa fa-rocket"></i></button>'
+                    ' data-target="#addPengajuanMutasiModal"'.                   
+                        '><i class="fa fa-eye"></i></button>'
                     ;
                     return $actionBtn;
                 })
@@ -53,4 +59,5 @@ class ApsRequestController extends Controller
                 ->make(true);
           }
     }
+
 }

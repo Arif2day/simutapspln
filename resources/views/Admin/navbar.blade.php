@@ -50,9 +50,12 @@
                 aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-bell fa-fw"></i>
                 <!-- Counter - Alerts -->
-                <span class="badge badge-danger badge-counter" id="counterNotif">
+                <span class="badge badge-danger badge-counter text-sm" id="counterNotif">
+                    @if($unreadNotifCount > 0)
+                        <span class="badge badge-danger">{{ $unreadNotifCount }}</span>
+                    @endif
                 </span>
-                <input type="hidden" id="linkednotif" name="linkednotif" value="{{url('getSync')}}">
+                {{-- <input type="hidden" id="linkednotif" name="linkednotif" value="{{url('getSync')}}"> --}}
             </a>
             <!-- Dropdown - Alerts -->
             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -60,20 +63,22 @@
                 <h6 class="dropdown-header">
                     Notifikasi Baru
                 </h6>
-                <div id="diskusi">
-                    <a class="dropdown-item d-flex align-items-center" href="{{url('discuss')}}">
-                        <div class="mr-3">
-                            <div class="icon-circle bg-primary">
-                                <i class="fas fa-comments text-white"></i>
+                @foreach ($unread as $item)                    
+                    <div id="permohonan">
+                        <a class="dropdown-item d-flex align-items-center" href="{{url($item->data['url'])}}">
+                            <div class="mr-3">
+                                <div class="icon-circle bg-primary">
+                                    <i class="fas fa-hands text-white"></i>
+                                </div>
                             </div>
-                        </div>
-                        <div>
-                            <div class="small text-gray-500">Diskusi & Komentar</div>
-                            <span id="span-diskusi">0 diskusi dan 0 komentar baru</span>
-                        </div>
-                    </a>
-                </div>
-                <div id="jawaban">
+                            <div>
+                                <div class="small text-gray-500">Permohonan Mutasi APS</div>
+                                <span id="span-diskusi">{{ $item->data['message'] }}</span>
+                            </div>
+                        </a>
+                    </div>
+                @endforeach
+                {{-- <div id="jawaban">
                     <a class="dropdown-item d-flex align-items-center" href="{{url('answer')}}">
                         <div class="mr-3">
                             <div class="icon-circle bg-success">
@@ -85,7 +90,7 @@
                             <span id="span-jawaban">0 submit baru</span>
                         </div>
                     </a>
-                </div>
+                </div> --}}
 
                 {{-- <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a> --}}
             </div>

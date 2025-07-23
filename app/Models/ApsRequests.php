@@ -9,7 +9,7 @@ class ApsRequests extends Model
 {
   protected $fillable = [''];
   protected $table = 'aps_requests';
-
+  
   public function user(){
       return $this->belongsTo('App\Models\Users', 'user_id');    
   }
