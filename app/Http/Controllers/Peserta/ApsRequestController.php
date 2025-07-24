@@ -107,9 +107,18 @@ class ApsRequestController extends Controller
           }
     }
 
-    public function detailApsRequest($id) {
+    public function detailApsRequest(Request $request,$id) {
         $apsrequest = ApsRequests::with(['user','unitFrom','positionFrom','unitTo','positionTo'])
-                        ->where('id',$id)->first();
+        ->where('id',$id)->first();
+        
+        if(Sentinel::check()->id==$apsrequest->next_verificator_id){
+            if ($request->has('notification_id')) {
+                $notificationId = $request->query('notification_id');
+                $result = Notifications::where('id', $notificationId)->update([
+                    'read_at' => Carbon::now()
+                ]);
+           }
+        }
         $documents = ApsDocuments::where('aps_request_id',$id)->get();
         return view('Admin.PESERTA.riwayat-permohonan.detail',compact(['apsrequest','documents']));        
     }

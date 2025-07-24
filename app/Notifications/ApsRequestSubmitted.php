@@ -53,7 +53,7 @@ class ApsRequestSubmitted extends Notification
     
         return [
             'message' => 'Pengajuan Mutasi APS baru dari ' . $fullName,
-            'url' => '/permohonan-mutasi/riwayat/' . $this->apsRequest->id
+            'url' => '/permohonan-mutasi/riwayat/' . $this->apsRequest->id. '?notification_id=' . $this->apsRequest->notification_id
         ];
     }
 

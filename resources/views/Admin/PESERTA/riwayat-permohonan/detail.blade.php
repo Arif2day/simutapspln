@@ -96,7 +96,8 @@
                 <!-- Card Body -->
                 <div class="card-body">
                     <div class="row float-right mx-1 mb-2">
-                        <div class="container_div">
+                        
+                        {{-- <div class="container_div">
                             <span class="text_div">Peserta</span>
                             <div class="divider_div divider_div_done">
                                 <span class="icon">&#10003;</span> <!-- Unicode centang -->
@@ -116,9 +117,11 @@
                                 <span class="icon" >&#x231B;</span> <!-- Unicode silang -->                                
                             </div>
                             <span class="text_div">Waiting</span>
-                        </div>
-                        
-                        <span>{{ Sentinel::getUser()->slug }}</span>
+                        </div> --}}
+                        @if ($apsrequest->next_verificator_id==Sentinel::getUser()->id)
+                            <a href="" class="btn btn-sm btn-success mr-2">Approve</a>                        
+                            <a href="" class="btn btn-sm btn-danger">Reject</a>                        
+                        @endif
                         
                     </div>
                 </div>

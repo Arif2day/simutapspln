@@ -96,6 +96,17 @@ class PermohonanMutasiController extends Controller
 
         $documents = json_decode($request->input('documents'), true);
 
+        // cari gm user untuk di notif
+        $gmUsers = DB::table('users')
+        ->join('user_placements', 'users.id', '=', 'user_placements.user_id')
+        ->join('role_users', 'users.id', '=', 'role_users.user_id')
+        ->join('roles', 'role_users.role_id', '=', 'roles.id')
+        ->where('user_placements.unit_id', $request->unit_id_from)
+        ->where('roles.slug', 'general-manager')
+        ->select('users.*')
+        ->limit(1)
+        ->get();
+
         try {
             $mode = $request->mode_simpan;
             $prev_step = "pemohon";
@@ -106,6 +117,7 @@ class PermohonanMutasiController extends Controller
             $data->status = $mode;
             $data->prev_step = $prev_step;
             $data->next_step = $next_step;
+            $data->next_verificator_id = $gmUsers[0]->id;
             $data->unit_id_to = $request->unit_id_to;
             $data->unit_id_from = $request->unit_id_from;
             $data->position_id_to = $request->position_id_to;
@@ -137,15 +149,7 @@ class PermohonanMutasiController extends Controller
                     $adoc->uploaded_at = Carbon::today();
                     $adoc->save();
                 }          
-                // Kirim ke user yang ditentukan (misal ke role tertentu)
-                $gmUsers = DB::table('users')
-                    ->join('user_placements', 'users.id', '=', 'user_placements.user_id')
-                    ->join('role_users', 'users.id', '=', 'role_users.user_id')
-                    ->join('roles', 'role_users.role_id', '=', 'roles.id')
-                    ->where('user_placements.unit_id', $request->unit_id_from)
-                    ->where('roles.slug', 'general-manager')
-                    ->select('users.*')
-                    ->get();
+                
 
                 foreach ($gmUsers as $userData) {
                     $user = Sentinel::findById($userData->id);
