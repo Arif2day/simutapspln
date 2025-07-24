@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Peserta;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ApsRequests;
+use App\Models\ApsApprovals;
 use App\Models\ApsDocuments;
 use App\Models\Users;
 use App\Models\Notifications;
@@ -110,6 +111,7 @@ class ApsRequestController extends Controller
     public function detailApsRequest(Request $request,$id) {
         $apsrequest = ApsRequests::with(['user','unitFrom','positionFrom','unitTo','positionTo'])
         ->where('id',$id)->first();
+        $approvals = ApsApprovals::where('aps_request_id',$id)->get();
         
         if(Sentinel::check()->id==$apsrequest->next_verificator_id){
             if ($request->has('notification_id')) {
@@ -120,7 +122,7 @@ class ApsRequestController extends Controller
            }
         }
         $documents = ApsDocuments::where('aps_request_id',$id)->get();
-        return view('Admin.PESERTA.riwayat-permohonan.detail',compact(['apsrequest','documents']));        
+        return view('Admin.PESERTA.riwayat-permohonan.detail',compact(['apsrequest','documents','approvals']));        
     }
 
 }

@@ -91,7 +91,7 @@
             <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Proses Verisikasi</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Proses Verifikasi</h6>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
@@ -122,6 +122,71 @@
                             <a href="" class="btn btn-sm btn-success mr-2">Approve</a>                        
                             <a href="" class="btn btn-sm btn-danger">Reject</a>                        
                         @endif
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Riwayat Verifikasi</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="row float-right mx-1 mb-2">
+                        
+                        <div class="container_div">
+                            <span class="text_div">Pemohon</span>
+                            <div class="divider_div divider_div_done">
+                                <span class="icon">&#10003;</span> <!-- Unicode centang -->
+                            </div>
+                            <span class="text_div">Submitted</span>
+                        </div>
+                        @foreach ($approvals as $item)                            
+                            <div class="container_div">
+                                <span class="text_div">BPO Asal</span>
+                                <div class="divider_div divider_div_done">
+                                    <span class="icon" style="color:red!important">&#x2718;</span> <!-- Unicode silang -->                                
+                                </div>
+                                <span class="text_div">Waiting</span>
+                            </div>
+                        @endforeach
+                        <div class="container_div">
+                            <?php
+                                $title = '';
+                                switch ($apsrequest->next_step) {
+                                    case 'bpo_asal':
+                                        $title = 'GM Asal';
+                                        # code...
+                                        break;
+                                    case 'htd_asal':
+                                        $title = 'HTD Asal';
+                                        # code...
+                                        break;
+                                    case 'bpo_tujuan':
+                                        $title = 'GM Tujuan';
+                                        # code...
+                                        break;
+                                    case 'htd_tujuan':
+                                        $title = 'HTD Tujuan';
+                                        # code...
+                                        break;
+                                    case 'htd_korporat':
+                                        $title = 'HTD Korporat';
+                                        # code...
+                                        break;
+                                    default:
+                                        $title = 'Pemohon';
+                                        # code...
+                                        break;
+                                }
+                                ?>
+                            <span class="text_div">{{$title}}</span>
+                            <div class="divider_div">
+                                <span class="icon" >&#x231B;</span> <!-- Unicode silang -->                                
+                            </div>
+                            <span class="text_div">Waiting</span>
+                        </div>
                         
                     </div>
                 </div>
