@@ -26,7 +26,7 @@ class Users extends EloquentUser implements AuthenticatableContract
       'password',
       'remember_token',
     ];
-    protected $appends = ['nama','nama_role','role_id'];
+    protected $appends = ['nama','nama_role','role_id','slug'];
 
     // public function roles()
     // {
@@ -59,6 +59,11 @@ class Users extends EloquentUser implements AuthenticatableContract
     public function getNamaRoleAttribute()
     {
         return $this->getRoleUser->getRole->name;
+    }
+
+    public function getSlugAttribute()
+    {
+        return $this->getRoleUser->getRole->slug;
     }
 
     public function getRoleIdAttribute()

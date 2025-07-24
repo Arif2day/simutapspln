@@ -72,7 +72,9 @@ Route::group(['middleware' => 'sentinelmember'], function(){
 		});
 		Route::group(['prefix'=>'riwayat'],function(){
 			Route::get('/', [ApsRequestController::class,'index']);
+			Route::get('/{id}', [ApsRequestController::class,'detailApsRequest']);
 			Route::post('/list', [ApsRequestController::class,'getApsRequestList']);
+			Route::post('/listDoc', [ApsRequestController::class,'getApsDocumentList']);
 			Route::get('/tes',[ApsRequestController::class, 'tes']);
 		});
 	});

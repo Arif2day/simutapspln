@@ -393,6 +393,7 @@
             });
             return;
         }
+        $('.containerr').show();
         let user_id = $('input[id=user_id').val();
         let unit_id_from = $('select[id=a_unit_name]').val();        
         let position_id_from = $('select[id=a_position]').val();
@@ -423,11 +424,13 @@
                 table.ajax.reload();
                 clearFormPengajuanMutasi();
                 $('#addPengajuanMutasiModal').modal('hide');
+                $('.containerr').hide();
                 Swal.fire({icon: 'success', title: 'Horray...',text: data.message})
                 .then(() => {
                     window.location.href = $("#linked2").val();
                 });
             }else{
+                $('.containerr').hide();
                 Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
