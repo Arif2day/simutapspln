@@ -75,6 +75,7 @@ Route::group(['middleware' => 'sentinelmember'], function(){
 			Route::get('/{id}', [ApsRequestController::class,'detailApsRequest']);
 			Route::post('/list', [ApsRequestController::class,'getApsRequestList']);
 			Route::post('/listDoc', [ApsRequestController::class,'getApsDocumentList']);
+			Route::post('/response', [ApsRequestController::class,'responseRequest']);
 			Route::get('/tes',[ApsRequestController::class, 'tes']);
 		});
 	});

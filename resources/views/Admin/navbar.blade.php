@@ -65,7 +65,7 @@
                 </h6>
                 @foreach ($unread as $item)                    
                     <div id="permohonan">
-                        <a class="dropdown-item d-flex align-items-center" href="{{url($item->data['url'])}}">
+                        <a class="dropdown-item d-flex align-items-center" href="{{url($item->data['url']).'?notification_id=' . $item->id}}">
                             <div class="mr-3">
                                 <div class="icon-circle bg-primary">
                                     <i class="fas fa-hands text-white"></i>

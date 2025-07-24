@@ -15,13 +15,13 @@ class ApsApprovals extends Model
       return $this->hasMany(ApsDocuments::class, 'aps_approval_id');
   }
 
-  public function request(): BelongsTo
+  public function request()
     {
         return $this->belongsTo(ApsRequests::class, 'aps_request_id');
     }
 
     // Jika approved_by adalah user_id (numeric), ganti jadi ini:
-    public function approver(): BelongsTo
+    public function approver()
     {
         return $this->belongsTo(Users::class, 'approved_by');
     }

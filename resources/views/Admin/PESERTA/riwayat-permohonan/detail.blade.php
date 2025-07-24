@@ -72,7 +72,7 @@
                                 <table class="table documents-datatable display" style="width:100%;">
                                     <thead class="text-center">
                                         <th>NO</th>
-                                        <th>KETERANGAN</th>
+                                        <th>TIPE</th>
                                         <th>DOKUMEN</th>
                                         <th>UPLOADED BY</th>
                                         <th>UPLOADED AT</th>
@@ -95,32 +95,10 @@
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
-                    <div class="row float-right mx-1 mb-2">
-                        
-                        {{-- <div class="container_div">
-                            <span class="text_div">Peserta</span>
-                            <div class="divider_div divider_div_done">
-                                <span class="icon">&#10003;</span> <!-- Unicode centang -->
-                            </div>
-                            <span class="text_div">Submitted</span>
-                        </div>
-                        <div class="container_div">
-                            <span class="text_div">BPO Asal</span>
-                            <div class="divider_div divider_div_done">
-                                <span class="icon" style="color:red!important">&#x2718;</span> <!-- Unicode silang -->                                
-                            </div>
-                            <span class="text_div">Waiting</span>
-                        </div>
-                        <div class="container_div">
-                            <span class="text_div">Peserta</span>
-                            <div class="divider_div">
-                                <span class="icon" >&#x231B;</span> <!-- Unicode silang -->                                
-                            </div>
-                            <span class="text_div">Waiting</span>
-                        </div> --}}
+                    <div class="row mx-1 justify-content-center mb-2">                        
                         @if ($apsrequest->next_verificator_id==Sentinel::getUser()->id)
-                            <a href="" class="btn btn-sm btn-success mr-2">Approve</a>                        
-                            <a href="" class="btn btn-sm btn-danger">Reject</a>                        
+                            <button  class="btn btn-sm btn-success mr-2" onclick="approveRequest()">Approve</button>                        
+                            <button  class="btn btn-sm btn-danger">Reject</button>                        
                         @endif
                         
                     </div>
@@ -136,19 +114,52 @@
                     <div class="row float-right mx-1 mb-2">
                         
                         <div class="container_div">
-                            <span class="text_div">Pemohon</span>
+                            <span class="text_div text_end" title="{{ $apsrequest->user->nama }}">Pemohon</span>
                             <div class="divider_div divider_div_done">
                                 <span class="icon">&#10003;</span> <!-- Unicode centang -->
                             </div>
-                            <span class="text_div">Submitted</span>
+                            <span class="text_div text_end" title="{{ $apsrequest->created_at->translatedFormat('d F Y H:i') }}">Submitted</span>
                         </div>
                         @foreach ($approvals as $item)                            
                             <div class="container_div">
-                                <span class="text_div">BPO Asal</span>
+                                <?php
+                                $appr_title = '';
+                                switch ($item->step) {
+                                    case 'bpo_asal':
+                                        $appr_title = 'GM Asal';
+                                        # code...
+                                        break;
+                                    case 'htd_asal':
+                                        $appr_title = 'HTD Asal';
+                                        # code...
+                                        break;
+                                    case 'bpo_tujuan':
+                                        $appr_title = 'GM Tujuan';
+                                        # code...
+                                        break;
+                                    case 'htd_tujuan':
+                                        $appr_title = 'HTD Tujuan';
+                                        # code...
+                                        break;
+                                    case 'htd_korporat':
+                                        $appr_title = 'HTD Korporat';
+                                        # code...
+                                        break;
+                                    default:
+                                        $appr_title = 'Pemohon';
+                                        # code...
+                                        break;
+                                }
+                                ?>
+                                <span class="text_div text_end" title="{{ $item->approver->nama }}">{{ $appr_title }}</span>
                                 <div class="divider_div divider_div_done">
-                                    <span class="icon" style="color:red!important">&#x2718;</span> <!-- Unicode silang -->                                
+                                    @if ($item->status=='approved')
+                                        <span class="icon">&#10003;</span> 
+                                    @else
+                                        <span class="icon" style="color:red!important">&#x2718;</span> <!-- Unicode silang -->                                
+                                    @endif
                                 </div>
-                                <span class="text_div">Waiting</span>
+                                <span class="text_div text_end" title="{{ \Carbon\Carbon::parse($item->approved_at)->translatedFormat('d F Y H:i') }}">{{ ucfirst($item->status) }}</span>
                             </div>
                         @endforeach
                         <div class="container_div">
@@ -181,11 +192,11 @@
                                         break;
                                 }
                                 ?>
-                            <span class="text_div">{{$title}}</span>
+                            <span class="text_div text_end" title="{{ $apsrequest->verificator->nama }}">{{$title}}</span>
                             <div class="divider_div">
                                 <span class="icon" >&#x231B;</span> <!-- Unicode silang -->                                
                             </div>
-                            <span class="text_div">Waiting</span>
+                            <span class="text_div text_end" title="Waiting for response">Waiting</span>
                         </div>
                         
                     </div>
@@ -194,6 +205,7 @@
         </div>
     </div>
 </div>
+<input type="hidden" name="urlresponse" id="urlresponse" value="{{ url('permohonan-mutasi/riwayat/response') }}">
 @endsection
 @section('script')
 <script>
@@ -241,7 +253,7 @@
         },
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'document_name', name: 'document_name'},
+            {data: 'document_type', name: 'document_type'},
             {data: 'document_view', name: 'document_view'},
             {data: 'uploader.nama_role', name: 'uploader.nama_role'},
             {data: 'uploaded_at', name: 'uploaded_at'},
@@ -252,5 +264,60 @@
     function execFil() {    
         table.ajax.reload();
     }
+
+    function approveRequest() {
+        if("{{ Sentinel::getUser()->roles()->first()->slug }}"=="super-admin"){
+            
+        }else{
+            approveNonCorporation();
+        }
+    }
+
+    function approveNonCorporation() {
+        Swal.fire({
+            title: 'Yakin akan menyetujui?',
+            text: "Data ini tidak bisa dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#ccc',
+            confirmButtonText: 'Ya, setujui!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+            // AJAX call here
+            let datar = {};
+                datar['_method']='POST';
+                datar['_token']=$('._token').data('token');
+                datar['aps_request_id']={{ $apsrequest->id }};
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    type: 'post',
+                    url: $("#urlresponse").val(),
+                    data:datar,
+                    success: function(data) {
+                        if (data.error==false) {
+                            table.ajax.reload();
+                            Swal.fire({icon: 'success', title: 'Approved!',text: data.message})
+                            .then(() => {
+                                location.reload();                                
+                            });
+                        }else{
+                            Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: data.message,
+                            });
+                        }
+                    },
+                });  
+            }
+        });
+    }
+
 </script>
 @endsection

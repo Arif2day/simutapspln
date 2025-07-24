@@ -154,3 +154,15 @@
       color: green;
       z-index: 1;
     }
+
+    .text_end {
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer; /* Menunjukkan bahwa elemen bisa diinteraksi */
+      transition: color 0.3s ease, text-decoration 0.3s ease;
+    }
+    
+    .text_end:hover {
+      color: #007bff; /* Ubah warna teks saat hover */
+      text-decoration: underline;
+    }

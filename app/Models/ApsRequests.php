@@ -13,6 +13,9 @@ class ApsRequests extends Model
   public function user(){
       return $this->belongsTo('App\Models\Users', 'user_id');    
   }
+  public function verificator(){
+        return $this->belongsTo('App\Models\Users', 'next_verificator_id');    
+  }
   public function unitTo(){
       return $this->belongsTo('App\Models\Units','unit_id_to');
   }
