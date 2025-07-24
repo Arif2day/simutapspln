@@ -152,9 +152,9 @@
                                 onclick="clearFormPengajuanMutasi()">
                                     <i class="fa fa-times"></i> Cancel
                                 </button>
-                                <button class="btn btn-primary submitDraft" onclick="submitPermohonan('draft')">
+                                {{-- <button class="btn btn-primary submitDraft" onclick="submitPermohonan('draft')">
                                     💾 Simpan Sebagai Draft
-                                </button>
+                                </button> --}}
                                 <button class="btn btn-info submitPermohonan" onclick="submitPermohonan('submitted')">
                                     🚀 Submit Permohonan
                                 </button>
