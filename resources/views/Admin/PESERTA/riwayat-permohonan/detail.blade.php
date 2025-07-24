@@ -75,8 +75,8 @@
                                         <th>TIPE</th>
                                         <th>DOKUMEN</th>
                                         <th>UPLOADED BY</th>
+                                        <th>UPLOADER</th>
                                         <th>UPLOADED AT</th>
-                                        <th>ACTION</th>
                                     </thead>
                                     <tbody></tbody>
                                 </table>
@@ -96,9 +96,13 @@
                 <!-- Card Body -->
                 <div class="card-body">
                     <div class="row mx-1 justify-content-center mb-2">                        
-                        @if ($apsrequest->next_verificator_id==Sentinel::getUser()->id)
-                            <button  class="btn btn-sm btn-success mr-2" onclick="approveRequest()">Approve</button>                        
-                            <button  class="btn btn-sm btn-danger">Reject</button>                        
+                        @if ($apsrequest->next_verificator_id==Sentinel::getUser()->id&&$apsrequest->next_verificator_id!=$apsrequest->user_id)                            
+                            @if ($apsrequest->prev_step=="bpo_tujuan"||($apsrequest->prev_step=="htd_tujuan"&&$apsrequest->next_step=="htd_asal"))
+                                <button  class="btn btn-sm btn-success mr-2" onclick="uploadNotaDinas()">Upload Nota Dinas</button>                        
+                                @else
+                                <button  class="btn btn-sm btn-success mr-2" onclick="approveRequest()">Approve</button>                        
+                                <button  class="btn btn-sm btn-danger" onclick="rejectRequest()">Reject</button>                        
+                            @endif    
                         @endif
                         
                     </div>
@@ -194,9 +198,25 @@
                                 ?>
                             <span class="text_div text_end" title="{{ $apsrequest->verificator->nama }}">{{$title}}</span>
                             <div class="divider_div">
-                                <span class="icon" >&#x231B;</span> <!-- Unicode silang -->                                
+                                @if ($apsrequest->status == 'approved')                                    
+                                    <span class="icon" >&#10003;</span> <!-- Unicode silang -->   
+                                @elseif($apsrequest->status == 'rejected')
+                                    <span class="icon" style="color:red!important">&#x2718;</span> <!-- Unicode silang -->                                
+                                @else                             
+                                    <span class="icon" >&#x231B;</span> <!-- Unicode silang -->                                
+                                @endif
                             </div>
-                            <span class="text_div text_end" title="Waiting for response">Waiting</span>
+                            <span class="text_div text_end" title="{{ 
+                                $apsrequest->status == 'approved' || $apsrequest->status == 'rejected' 
+                                    ? $apsrequest->updated_at->translatedFormat('d F Y H:i') 
+                                    : 'Waiting for response' 
+                                }}">
+                                @if ($apsrequest->status=='approved'||$apsrequest->status=='rejected')
+                                    Done
+                                    @else
+                                    Waiting
+                                @endif
+                            </span>
                         </div>
                         
                     </div>
@@ -206,6 +226,8 @@
     </div>
 </div>
 <input type="hidden" name="urlresponse" id="urlresponse" value="{{ url('permohonan-mutasi/riwayat/response') }}">
+<input type="hidden" name="urlresponse2" id="urlresponse2" value="{{ url('permohonan-mutasi/riwayat/response-reject') }}">
+<input type="hidden" name="urlresponse3" id="urlresponse3" value="{{ url('permohonan-mutasi/riwayat/response-upload') }}">
 @endsection
 @section('script')
 <script>
@@ -256,8 +278,8 @@
             {data: 'document_type', name: 'document_type'},
             {data: 'document_view', name: 'document_view'},
             {data: 'uploader.nama_role', name: 'uploader.nama_role'},
+            {data: 'uploader.nama', name:'uploader.nama'},               
             {data: 'uploaded_at', name: 'uploaded_at'},
-            {data: 'action', name:'action'},               
         ]       
     });
 
@@ -267,10 +289,142 @@
 
     function approveRequest() {
         if("{{ Sentinel::getUser()->roles()->first()->slug }}"=="super-admin"){
-            
+            approveCorporation();
         }else{
             approveNonCorporation();
         }
+    }
+
+    function rejectRequest() {
+        Swal.fire({
+            title: 'Upload Surat Jawaban',
+            html: `
+                <p>Pastikan surat jawaban sudah benar sebelum menolak.</p>
+                <div class="form-group row">
+                    <label for="surat_jawaban" class="col-sm-4 col-form-label">Pilih Dokumen:</label>
+                    <div class="col-sm-8">                        
+                        <input type="file" id="surat_jawaban" class="form-control" accept=".pdf" />
+                    </div>
+                </div>
+            `,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#ccc',
+            confirmButtonText: 'Ya, tolak!',
+            cancelButtonText: 'Batal',
+            preConfirm: () => {
+                const file = document.getElementById('surat_jawaban').files[0];
+                if (!file) {
+                    Swal.showValidationMessage('Mohon unggah dokumen Surat Jawaban terlebih dahulu.');
+                    return false;
+                }
+                return file;
+            }
+        }).then((result) => {
+            if (result.isConfirmed && result.value) {
+                let file = result.value;
+                let formData = new FormData();
+                formData.append('_method', 'POST');
+                formData.append('_token', $('._token').data('token'));
+                formData.append('aps_request_id', {{ $apsrequest->id }});
+                formData.append('surat_jawaban', file);
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    url: $("#urlresponse2").val(),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(data) {
+                        if (data.error === false) {
+                            Swal.fire({ icon: 'success', title: 'Rejected!', text: data.message })
+                            .then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: data.message,
+                            });
+                        }
+                    }
+                });
+            }
+        }); 
+    }
+
+    function approveCorporation() {
+        Swal.fire({
+            title: 'Upload SK Terbit',
+            html: `
+                <p>Pastikan SK sudah benar sebelum menyetujui.</p>
+                <div class="form-group row">
+                    <label for="sk_terbit" class="col-sm-4 col-form-label">Pilih Dokumen:</label>
+                    <div class="col-sm-8">                        
+                        <input type="file" id="sk_terbit" class="form-control" accept=".pdf" />
+                    </div>
+                </div>
+            `,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#ccc',
+            confirmButtonText: 'Ya, setujui!',
+            cancelButtonText: 'Batal',
+            preConfirm: () => {
+                const file = document.getElementById('sk_terbit').files[0];
+                if (!file) {
+                    Swal.showValidationMessage('Mohon unggah dokumen SK Terbit terlebih dahulu.');
+                    return false;
+                }
+                return file;
+            }
+        }).then((result) => {
+            if (result.isConfirmed && result.value) {
+                let file = result.value;
+                let formData = new FormData();
+                formData.append('_method', 'POST');
+                formData.append('_token', $('._token').data('token'));
+                formData.append('aps_request_id', {{ $apsrequest->id }});
+                formData.append('sk_terbit', file);
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    url: $("#urlresponse").val(),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(data) {
+                        if (data.error === false) {
+                            Swal.fire({ icon: 'success', title: 'Approved!', text: data.message })
+                            .then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: data.message,
+                            });
+                        }
+                    }
+                });
+            }
+        });
     }
 
     function approveNonCorporation() {
@@ -315,6 +469,72 @@
                         }
                     },
                 });  
+            }
+        });
+    }
+
+    function uploadNotaDinas() {
+        Swal.fire({
+            title: 'Upload Nota Dinas',
+            html: `
+                <p>Pastikan Nota Dinas sudah benar sebelum mengupload.</p>
+                <div class="form-group row">
+                    <label for="nota_dinas" class="col-sm-4 col-form-label">Pilih Dokumen:</label>
+                    <div class="col-sm-8">                        
+                        <input type="file" id="nota_dinas" class="form-control" accept=".pdf" />
+                    </div>
+                </div>
+            `,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#ccc',
+            confirmButtonText: 'Ya, upload!',
+            cancelButtonText: 'Batal',
+            preConfirm: () => {
+                const file = document.getElementById('nota_dinas').files[0];
+                if (!file) {
+                    Swal.showValidationMessage('Mohon unggah dokumen Nota Dinas terlebih dahulu.');
+                    return false;
+                }
+                return file;
+            }
+        }).then((result) => {
+            if (result.isConfirmed && result.value) {
+                let file = result.value;
+                let formData = new FormData();
+                formData.append('_method', 'POST');
+                formData.append('_token', $('._token').data('token'));
+                formData.append('aps_request_id', {{ $apsrequest->id }});
+                formData.append('nota_dinas', file);
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    url: $("#urlresponse3").val(),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(data) {
+                        if (data.error === false) {
+                            Swal.fire({ icon: 'success', title: 'Uploaded!', text: data.message })
+                            .then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: data.message,
+                            });
+                        }
+                    }
+                });
             }
         });
     }

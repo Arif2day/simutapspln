@@ -11,6 +11,7 @@ use App\Models\Users;
 use App\Models\Notifications;
 use App\Notifications\ApsRequestSubmitted;
 use App\Helpers\NotificationHelper;
+use App\Helpers\ImageHelper;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
@@ -132,6 +133,7 @@ class ApsRequestController extends Controller
         try {
             $data = ApsRequests::where('id',$request->aps_request_id)->first();  
             
+            $prev_step = $data->prev_step;
             $prev = $data->next_step;
             $appBy = $data->next_verificator_id;
             $next = '';
@@ -152,33 +154,77 @@ class ApsRequestController extends Controller
                     $next_verificator_id = $verificator[0]->id;
                     break;
                 case 'htd_asal':
-                    $next = 'htd_tujuan';
-                    // cari verificator user untuk di notif
-                    $verificator = DB::table('users')
-                    ->join('user_placements', 'users.id', '=', 'user_placements.user_id')
-                    ->join('role_users', 'users.id', '=', 'role_users.user_id')
-                    ->join('roles', 'role_users.role_id', '=', 'roles.id')
-                    ->where('user_placements.unit_id', $data->unit_id_to)
-                    ->where('roles.slug', 'human-talent-development')
-                    ->select('users.*')
-                    ->limit(1)
-                    ->get();
-                    $next_verificator_id = $verificator[0]->id;
-                    break;
+                    if($prev_step=='bpo_asal'){
+                        $next = 'htd_tujuan';
+                        // cari verificator user untuk di notif
+                        $verificator = DB::table('users')
+                        ->join('user_placements', 'users.id', '=', 'user_placements.user_id')
+                        ->join('role_users', 'users.id', '=', 'role_users.user_id')
+                        ->join('roles', 'role_users.role_id', '=', 'roles.id')
+                        ->where('user_placements.unit_id', $data->unit_id_to)
+                        ->where('roles.slug', 'human-talent-development')
+                        ->select('users.*')
+                        ->limit(1)
+                        ->get();
+                        $next_verificator_id = $verificator[0]->id;
+                        break;
+                    }else{
+                        $next = 'htd_korporat';
+                        $verificator = DB::table('users')
+                        ->join('user_placements', 'users.id', '=', 'user_placements.user_id')
+                        ->join('role_users', 'users.id', '=', 'role_users.user_id')
+                        ->join('roles', 'role_users.role_id', '=', 'roles.id')
+                        ->where('roles.slug', 'super-admin')
+                        ->select('users.*')
+                        ->limit(1)
+                        ->get();
+                        $next_verificator_id = $verificator[0]->id;
+                        break;
+                    }
                 case 'htd_tujuan':
-                    $next = 'bpo_tujuan';
-                    // cari verificator user untuk di notif
-                    $verificator = DB::table('users')
-                    ->join('user_placements', 'users.id', '=', 'user_placements.user_id')
-                    ->join('role_users', 'users.id', '=', 'role_users.user_id')
-                    ->join('roles', 'role_users.role_id', '=', 'roles.id')
-                    ->where('user_placements.unit_id', $data->unit_id_to)
-                    ->where('roles.slug', 'general-manager')
-                    ->select('users.*')
-                    ->limit(1)
-                    ->get();
-                    $next_verificator_id = $verificator[0]->id;
-                    break;
+                    if($prev_step=='htd_asal'){
+                        $next = 'bpo_tujuan';
+                        // cari verificator user untuk di notif
+                        $verificator = DB::table('users')
+                        ->join('user_placements', 'users.id', '=', 'user_placements.user_id')
+                        ->join('role_users', 'users.id', '=', 'role_users.user_id')
+                        ->join('roles', 'role_users.role_id', '=', 'roles.id')
+                        ->where('user_placements.unit_id', $data->unit_id_to)
+                        ->where('roles.slug', 'general-manager')
+                        ->select('users.*')
+                        ->limit(1)
+                        ->get();
+                        $next_verificator_id = $verificator[0]->id;
+                        break;                    
+                    }else{
+                        $next = 'htd_asal';
+                        // cari verificator user untuk di notif
+                        $verificator = DB::table('users')
+                        ->join('user_placements', 'users.id', '=', 'user_placements.user_id')
+                        ->join('role_users', 'users.id', '=', 'role_users.user_id')
+                        ->join('roles', 'role_users.role_id', '=', 'roles.id')
+                        ->where('user_placements.unit_id', $data->unit_id_from)
+                        ->where('roles.slug', 'human-talent-development')
+                        ->select('users.*')
+                        ->limit(1)
+                        ->get();
+                        $next_verificator_id = $verificator[0]->id;
+                        break;
+                    }
+                case 'bpo_tujuan':
+                        $next = 'htd_tujuan';
+                        // cari verificator user untuk di notif
+                        $verificator = DB::table('users')
+                        ->join('user_placements', 'users.id', '=', 'user_placements.user_id')
+                        ->join('role_users', 'users.id', '=', 'role_users.user_id')
+                        ->join('roles', 'role_users.role_id', '=', 'roles.id')
+                        ->where('user_placements.unit_id', $data->unit_id_to)
+                        ->where('roles.slug', 'human-talent-development')
+                        ->select('users.*')
+                        ->limit(1)
+                        ->get();
+                        $next_verificator_id = $verificator[0]->id;
+                        break;                                        
                 default:
                     $next = 'htd_korporat';
                     $verificator = DB::table('users')
@@ -198,10 +244,17 @@ class ApsRequestController extends Controller
                 $res['message']="Can't proccess, next verificator is null!";
                 return response()->json($res);
             }
+            if($prev=='htd_korporat'){
+                $next='pemohon';
+                $next_verificator_id = $data->user_id;
+                $verificator = Users::where('id',$data->user_id)->get();
+                $data->status = 'approved';
+            }            
             $data->prev_step = $prev;
             $data->next_step = $next;
             $data->next_verificator_id = $next_verificator_id;
             if($data->save()){
+                // approvals
                 $approval = new ApsApprovals();
                 $approval->aps_request_id = $data->id;
                 $approval->step = $prev;
@@ -209,6 +262,31 @@ class ApsRequestController extends Controller
                 $approval->approved_at = Carbon::now();
                 $approval->status = 'approved';
                 $approval->save();
+                // documents
+                if ($request->hasFile('sk_terbit')) {
+                    $file = $request->file('sk_terbit');                    
+                    $base64 = base64_encode(file_get_contents($file->getRealPath()));
+                    $mime = $file->getMimeType(); // contoh: "application/pdf"
+                    $dataUri = "data:$mime;base64,$base64";
+                    
+                    // Simpan path file di database atau gunakan sesuai kebutuhan
+                    $pdfData = (object)[
+                        'path' => 'documents/',
+                        'uniqid' => "documents",
+                        'pdf' => $dataUri,
+                        ];
+                    $docPath = ImageHelper::uploadPDF($pdfData);       
+
+                    $adoc = new ApsDocuments();
+                    $adoc->aps_request_id =  $data->id;
+                    $adoc->document_type =  "sk_terbit";
+                    $adoc->document_name = "SK Terbit";
+                    $adoc->file_path = $docPath;
+                    $adoc->uploaded_by = Sentinel::getUser()->id;
+                    $adoc->uploaded_at = Carbon::today();
+                    $adoc->save();                         
+                }
+                
                 // jangan lupa dinotif
                 foreach ($verificator as $userData) {
                     $user = Sentinel::findById($userData->id);
@@ -220,6 +298,254 @@ class ApsRequestController extends Controller
             }else{
               $res['error']=true;
               $res['message']="Permohonan failed to approve!";
+            }
+          } catch (\Exception $e) {
+            $res['error']=true;
+            $res['message']=$e->getMessage();
+          }
+        return response()->json($res);
+    }
+
+    public function responseRequestUpload(Request $request) {
+        $res['error']=false;
+        $res['message']="";
+        $res['data']='';
+        try {
+            $data = ApsRequests::where('id',$request->aps_request_id)->first();  
+            
+            $prev_step = $data->prev_step;
+            $prev = $data->next_step;
+            $appBy = $data->next_verificator_id;
+            $next = '';
+            $next_verificator_id = null;
+            switch ($data->next_step) {
+                case 'bpo_asal':
+                    $next = 'htd_asal';
+                    // cari verificator user untuk di notif
+                    $verificator = DB::table('users')
+                    ->join('user_placements', 'users.id', '=', 'user_placements.user_id')
+                    ->join('role_users', 'users.id', '=', 'role_users.user_id')
+                    ->join('roles', 'role_users.role_id', '=', 'roles.id')
+                    ->where('user_placements.unit_id', $data->unit_id_from)
+                    ->where('roles.slug', 'human-talent-development')
+                    ->select('users.*')
+                    ->limit(1)
+                    ->get();
+                    $next_verificator_id = $verificator[0]->id;
+                    break;
+                case 'htd_asal':
+                    if($prev_step=='bpo_asal'){
+                        $next = 'htd_tujuan';
+                        // cari verificator user untuk di notif
+                        $verificator = DB::table('users')
+                        ->join('user_placements', 'users.id', '=', 'user_placements.user_id')
+                        ->join('role_users', 'users.id', '=', 'role_users.user_id')
+                        ->join('roles', 'role_users.role_id', '=', 'roles.id')
+                        ->where('user_placements.unit_id', $data->unit_id_to)
+                        ->where('roles.slug', 'human-talent-development')
+                        ->select('users.*')
+                        ->limit(1)
+                        ->get();
+                        $next_verificator_id = $verificator[0]->id;
+                        break;
+                    }else{
+                        $next = 'htd_korporat';
+                        $verificator = DB::table('users')
+                        ->join('user_placements', 'users.id', '=', 'user_placements.user_id')
+                        ->join('role_users', 'users.id', '=', 'role_users.user_id')
+                        ->join('roles', 'role_users.role_id', '=', 'roles.id')
+                        ->where('roles.slug', 'super-admin')
+                        ->select('users.*')
+                        ->limit(1)
+                        ->get();
+                        $next_verificator_id = $verificator[0]->id;
+                        break;
+                    }
+                case 'htd_tujuan':
+                    if($prev_step=='htd_asal'){
+                        $next = 'bpo_tujuan';
+                        // cari verificator user untuk di notif
+                        $verificator = DB::table('users')
+                        ->join('user_placements', 'users.id', '=', 'user_placements.user_id')
+                        ->join('role_users', 'users.id', '=', 'role_users.user_id')
+                        ->join('roles', 'role_users.role_id', '=', 'roles.id')
+                        ->where('user_placements.unit_id', $data->unit_id_to)
+                        ->where('roles.slug', 'general-manager')
+                        ->select('users.*')
+                        ->limit(1)
+                        ->get();
+                        $next_verificator_id = $verificator[0]->id;
+                        break;                    
+                    }else{
+                        $next = 'htd_asal';
+                        // cari verificator user untuk di notif
+                        $verificator = DB::table('users')
+                        ->join('user_placements', 'users.id', '=', 'user_placements.user_id')
+                        ->join('role_users', 'users.id', '=', 'role_users.user_id')
+                        ->join('roles', 'role_users.role_id', '=', 'roles.id')
+                        ->where('user_placements.unit_id', $data->unit_id_from)
+                        ->where('roles.slug', 'human-talent-development')
+                        ->select('users.*')
+                        ->limit(1)
+                        ->get();
+                        $next_verificator_id = $verificator[0]->id;
+                        break;
+                    }
+                case 'bpo_tujuan':
+                        $next = 'htd_tujuan';
+                        // cari verificator user untuk di notif
+                        $verificator = DB::table('users')
+                        ->join('user_placements', 'users.id', '=', 'user_placements.user_id')
+                        ->join('role_users', 'users.id', '=', 'role_users.user_id')
+                        ->join('roles', 'role_users.role_id', '=', 'roles.id')
+                        ->where('user_placements.unit_id', $data->unit_id_to)
+                        ->where('roles.slug', 'human-talent-development')
+                        ->select('users.*')
+                        ->limit(1)
+                        ->get();
+                        $next_verificator_id = $verificator[0]->id;
+                        break;                                        
+                default:
+                    $next = 'htd_korporat';
+                    $verificator = DB::table('users')
+                    ->join('user_placements', 'users.id', '=', 'user_placements.user_id')
+                    ->join('role_users', 'users.id', '=', 'role_users.user_id')
+                    ->join('roles', 'role_users.role_id', '=', 'roles.id')
+                    ->where('roles.slug', 'super-admin')
+                    ->select('users.*')
+                    ->limit(1)
+                    ->get();
+                    $next_verificator_id = $verificator[0]->id;
+                    break;
+            }
+            if($next_verificator_id==null)
+            {
+                $res['error']=true;
+                $res['message']="Can't proccess, next verificator is null!";
+                return response()->json($res);
+            }
+            if($prev=='htd_korporat'){
+                $next='pemohon';
+                $next_verificator_id = $data->user_id;
+                $verificator = Users::where('id',$data->user_id)->get();
+                $data->status = 'approved';
+            }            
+            $data->prev_step = $prev;
+            $data->next_step = $next;
+            $data->next_verificator_id = $next_verificator_id;
+            if($data->save()){
+                // approvals
+                $approval = new ApsApprovals();
+                $approval->aps_request_id = $data->id;
+                $approval->step = $prev;
+                $approval->approved_by = $appBy;
+                $approval->approved_at = Carbon::now();
+                $approval->status = 'approved';
+                $approval->save();
+                // documents
+                if ($request->hasFile('nota_dinas')) {
+                    $file = $request->file('nota_dinas');                    
+                    $base64 = base64_encode(file_get_contents($file->getRealPath()));
+                    $mime = $file->getMimeType(); // contoh: "application/pdf"
+                    $dataUri = "data:$mime;base64,$base64";
+                    
+                    // Simpan path file di database atau gunakan sesuai kebutuhan
+                    $pdfData = (object)[
+                        'path' => 'documents/',
+                        'uniqid' => "documents",
+                        'pdf' => $dataUri,
+                        ];
+                    $docPath = ImageHelper::uploadPDF($pdfData);       
+
+                    $adoc = new ApsDocuments();
+                    $adoc->aps_request_id =  $data->id;
+                    $adoc->document_type =  "nota_dinas";
+                    $adoc->document_name = "Nota Dinas";
+                    $adoc->file_path = $docPath;
+                    $adoc->uploaded_by = Sentinel::getUser()->id;
+                    $adoc->uploaded_at = Carbon::today();
+                    $adoc->save();                         
+                }
+                
+                // jangan lupa dinotif
+                foreach ($verificator as $userData) {
+                    $user = Sentinel::findById($userData->id);
+                    if ($user) {
+                        $user->notify(new ApsRequestSubmitted($data));
+                    }
+                }
+              $res['message']="Dokumen uploaded successfully.";
+            }else{
+              $res['error']=true;
+              $res['message']="Dokumen failed to upload!";
+            }
+          } catch (\Exception $e) {
+            $res['error']=true;
+            $res['message']=$e->getMessage();
+          }
+        return response()->json($res);
+    }
+
+    public function responseRequestReject(Request $request) {
+        $res['error']=false;
+        $res['message']="";
+        $res['data']='';
+        try {
+            $data = ApsRequests::where('id',$request->aps_request_id)->first();  
+            $data->status = 'rejected';
+            $prev = $data->next_step;
+            $appBy = $data->next_verificator_id;
+            $next='pemohon';
+            $next_verificator_id = $data->user_id;
+            $verificator = Users::where('id',$data->user_id)->get();
+            $data->prev_step = $prev;
+            $data->next_step = $next;
+            $data->next_verificator_id = $next_verificator_id;
+            if($data->save()){
+                // approvals
+                $approval = new ApsApprovals();
+                $approval->aps_request_id = $data->id;
+                $approval->step = $prev;
+                $approval->approved_by = $appBy;
+                $approval->approved_at = Carbon::now();
+                $approval->status = 'rejected';
+                $approval->save();
+                // documents
+                if ($request->hasFile('surat_jawaban')) {
+                    $file = $request->file('surat_jawaban');                    
+                    $base64 = base64_encode(file_get_contents($file->getRealPath()));
+                    $mime = $file->getMimeType(); // contoh: "application/pdf"
+                    $dataUri = "data:$mime;base64,$base64";
+                    
+                    // Simpan path file di database atau gunakan sesuai kebutuhan
+                    $pdfData = (object)[
+                        'path' => 'documents/',
+                        'uniqid' => "documents",
+                        'pdf' => $dataUri,
+                        ];
+                    $docPath = ImageHelper::uploadPDF($pdfData);       
+
+                    $adoc = new ApsDocuments();
+                    $adoc->aps_request_id =  $data->id;
+                    $adoc->document_type =  "surat_jawaban";
+                    $adoc->document_name = "Surat Jawaban";
+                    $adoc->file_path = $docPath;
+                    $adoc->uploaded_by = Sentinel::getUser()->id;
+                    $adoc->uploaded_at = Carbon::today();
+                    $adoc->save();                         
+                }
+                
+                // jangan lupa dinotif
+                foreach ($verificator as $userData) {
+                    $user = Sentinel::findById($userData->id);
+                    if ($user) {
+                        $user->notify(new ApsRequestSubmitted($data));
+                    }
+                }
+              $res['message']="Permohonan rejected successfully.";
+            }else{
+              $res['error']=true;
+              $res['message']="Permohonan failed to reject!";
             }
           } catch (\Exception $e) {
             $res['error']=true;
