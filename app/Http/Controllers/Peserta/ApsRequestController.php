@@ -279,6 +279,7 @@ class ApsRequestController extends Controller
 
                     $adoc = new ApsDocuments();
                     $adoc->aps_request_id =  $data->id;
+                    $adoc->aps_approval_id = $approval->id;
                     $adoc->document_type =  "sk_terbit";
                     $adoc->document_name = "SK Terbit";
                     $adoc->file_path = $docPath;
@@ -459,6 +460,7 @@ class ApsRequestController extends Controller
 
                     $adoc = new ApsDocuments();
                     $adoc->aps_request_id =  $data->id;
+                    $adoc->aps_approval_id = $approval->id;
                     $adoc->document_type =  "nota_dinas";
                     $adoc->document_name = "Nota Dinas";
                     $adoc->file_path = $docPath;
@@ -527,6 +529,7 @@ class ApsRequestController extends Controller
 
                     $adoc = new ApsDocuments();
                     $adoc->aps_request_id =  $data->id;
+                    $adoc->aps_approval_id = $approval->id;
                     $adoc->document_type =  "surat_jawaban";
                     $adoc->document_name = "Surat Jawaban";
                     $adoc->file_path = $docPath;
