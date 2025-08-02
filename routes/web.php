@@ -9,8 +9,10 @@ use App\Http\Controllers\BerandaController;
 use App\Http\Controllers\Super\UserManagerController;
 use App\Http\Controllers\Super\PositionController;
 use App\Http\Controllers\Super\UnitTypeController;
+use App\Http\Controllers\Super\UnitResourceRequirementController;
 use App\Http\Controllers\Super\UnitController;
 use App\Http\Controllers\Super\EmployeeStatusController;
+use App\Http\Controllers\Super\FTKController;
 use App\Http\Controllers\Peserta\PermohonanMutasiController;
 use App\Http\Controllers\Peserta\ApsRequestController;
 
@@ -81,6 +83,12 @@ Route::group(['middleware' => 'sentinelmember'], function(){
 			Route::get('/tes',[ApsRequestController::class, 'tes']);
 		});
 	});
+	Route::group(['prefix' => 'ftk'], function(){
+		Route::group(['prefix' => 'ftk'], function(){
+			Route::get('/', [FTKController::class,'index']);
+			Route::post('/list', [FTKController::class,'getFTKList']);
+		});
+	});
 	
 
 	Route::get('user-profile',[UserController::class,'userProfile']);
@@ -121,7 +129,16 @@ Route::group(['middleware' => 'SAmember'],function(){
 			Route::post('/',[UnitController::class,'store']);
 			Route::post('/update',[UnitController::class,'update']);
 			Route::delete('', [UnitController::class,'destroy']);
-		});
+		});		
+	});
+	Route::group(['prefix' => 'ftk'], function(){
+		Route::group(['prefix' => 'unit-resource-requirements'], function(){
+			Route::get('/', [UnitResourceRequirementController::class,'index']);
+			Route::post('/list', [UnitResourceRequirementController::class,'getUnitResReqList']);
+			Route::post('/',[UnitResourceRequirementController::class,'store']);
+			Route::post('/update',[UnitResourceRequirementController::class,'update']);
+			Route::delete('', [UnitResourceRequirementController::class,'destroy']);
+		});		
 	});
 	Route::group(['prefix' => 'user-manager'], function(){
 			Route::get('/', [UserManagerController::class,'index']);

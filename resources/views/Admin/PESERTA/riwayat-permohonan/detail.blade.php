@@ -98,11 +98,25 @@
                     <div class="row mx-1 justify-content-center mb-2">                        
                         @if ($apsrequest->next_verificator_id==Sentinel::getUser()->id&&$apsrequest->next_verificator_id!=$apsrequest->user_id)                            
                             @if ($apsrequest->prev_step=="bpo_tujuan"||($apsrequest->prev_step=="htd_tujuan"&&$apsrequest->next_step=="htd_asal"))
-                                <button  class="btn btn-sm btn-success mr-2" onclick="uploadNotaDinas()">Upload Nota Dinas</button>                        
+                                <button  class="btn btn-sm btn-success mr-2" onclick="uploadNotaDinas()">Upload/Terbitkan Nota Dinas</button>                        
                                 @else
-                                <button  class="btn btn-sm btn-success mr-2" onclick="approveRequest()">Approve</button>                        
+                                @if ($apsrequest->next_step=="htd_korporat")
+                                    <button  class="btn btn-sm btn-success mr-2" onclick="approveRequest()">Approve & Proses Penerbitan SK </button>                        
+                                @else
+                                    <button  class="btn btn-sm btn-success mr-2" onclick="approveRequest()">Approve</button>                        
+                                @endif
                                 <button  class="btn btn-sm btn-danger" onclick="rejectRequest()">Reject</button>                        
-                            @endif    
+                            @endif  
+                        @else
+                            @if ($apsrequest->status=='rejected')                            
+                            Ajuan telah selesai dengan status<br><span class="text-danger font-weight-bold">{{ strtoupper($apsrequest->status) }}</span>
+                            @elseif ($apsrequest->status=='approved')
+                            Ajuan telah selesai dengan status<br><span class="text-success font-weight-bold">{{ strtoupper($apsrequest->status) }}</span>
+                            @else
+                            Menunggu Verifikasi Oleh  
+                            <br>
+                            <span class="text-primary font-weight-bold">{{ strtoupper($apsrequest->next_step) }}</span>
+                            @endif
                         @endif
                         
                     </div>

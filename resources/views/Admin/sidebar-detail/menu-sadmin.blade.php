@@ -32,6 +32,24 @@
         </div>
     </div>
 </li>
+<li class="nav-item {{ request()->is('ftk*') ? 'active' : '' }}">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFTK"
+        aria-expanded="true" aria-controls="collapseFTK">
+        <i class="fas fa-fw fa-database"></i>
+        <span>FTK Data</span>
+    </a>
+    <div id="collapseFTK" class="collapse {{ request()->is('ftk*') ? 'show' : '' }}"
+        data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">            
+            <a class="collapse-item {{ request()->is('ftk/unit-resource-requirements') ? 'active' : '' }}" href="{{ url('ftk/unit-resource-requirements') }}">
+                Unit Res. Requirements
+            </a>
+            <a class="collapse-item {{ request()->is('ftk/ftk') ? 'active' : '' }}" href="{{ url('ftk/ftk') }}">
+                FTK
+            </a>
+        </div>
+    </div>
+</li>
 
 <li class="nav-item {{ 
     request()->is('user-manager') ? 'active' : '' 

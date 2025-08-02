@@ -29,8 +29,6 @@
     @include('Admin.sidebar-detail.menu-mhs')
     @endif
 
-    @if((Sentinel::getUser()->inRole('mahasiswa')))
-    @else
     <!-- Nav Item - Charts -->
     <li class="nav-item {{ 
             request()->is('user-profile') ? 'active' : '' 
@@ -38,9 +36,9 @@
         <a class="nav-link" href="{{url('user-profile')}}">
             <i class="fas fa-fw fa-id-badge"></i>
             <span>Profile</span></a>
-    </li>
-    <li class="nav-item {{ request()->is('permohonan-mutasi*') ? 'active' : '' }}">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePermohonanMutasi"
+        </li>
+        <li class="nav-item {{ request()->is('permohonan-mutasi*') ? 'active' : '' }}">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePermohonanMutasi"
             aria-expanded="true" aria-controls="collapsePermohonanMutasi">
             <i class="fas fa-fw fa-database"></i>
             <span>Permohonan Mutasi</span>
@@ -56,6 +54,15 @@
                 </a>
             </div>
         </div>
+    </li>
+    
+    @if(!Sentinel::getUser()->inRole('super-admin'))
+    <li class="nav-item {{ 
+            request()->is('ftk/ftk') ? 'active' : '' 
+            }}">
+        <a class="nav-link" href="{{url('ftk/ftk')}}">
+            <i class="fas fa-fw fa-id-badge"></i>
+            <span>FTK</span></a>
     </li>
     @endif
     {{-- <hr class="sidebar-divider"> --}}

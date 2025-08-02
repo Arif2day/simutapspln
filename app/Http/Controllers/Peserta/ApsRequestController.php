@@ -25,6 +25,7 @@ class ApsRequestController extends Controller
     }
 
     public function getApsRequestList(Request $req) {
+        $is_reviewed = $req->is_reviewed;
         if ($req->ajax()) {
             $user = Sentinel::getUser(); // atau auth()->user() jika pakai auth biasa
             $role = $user->roles->first()->slug; // sesuaikan cara ambil role-nya
@@ -53,6 +54,10 @@ class ApsRequestController extends Controller
                 default:
                     $query->where('user_id', $user->id);
                     break;
+            }
+
+            if ($is_reviewed !== 'all') {
+                $query->where('next_verificator_id', $user->id);
             }
 
             $data = $query->get();
