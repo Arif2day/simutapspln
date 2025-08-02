@@ -32,7 +32,7 @@ class DashboardController extends Controller
       if(Sentinel::getUser()->inRole('peserta')){
         $return['need_reviews'] = ApsRequests::where('next_verificator_id', $us->id)
         ->where('status','!=','approved')
-        ->where('status','!=','rejected')
+        ->where('status','!=','rejected') 
         ->count();
       }else{
         $return['need_reviews'] = ApsRequests::where('next_verificator_id', $us->id)->count();
