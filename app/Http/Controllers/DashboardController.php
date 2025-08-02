@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Users;
-use App\Models\APSRequests;
+use App\Models\ApsRequests;
 use App\Models\Units;
 use App\Helpers\customFormat;
 use App\Helpers\AKMHelper;
@@ -31,12 +31,12 @@ class DashboardController extends Controller
       }
       $return['ftkPerUnit'] = $this->getDataWithClose56();
       if(Sentinel::getUser()->inRole('peserta')){
-        $return['need_reviews'] = APSRequests::where('next_verificator_id', $us->id)
+        $return['need_reviews'] = ApsRequests::where('next_verificator_id', $us->id)
         ->where('status','!=','approved')
         ->where('status','!=','rejected')
         ->count();
       }else{
-        $return['need_reviews'] = APSRequests::where('next_verificator_id', $us->id)->count();
+        $return['need_reviews'] = ApsRequests::where('next_verificator_id', $us->id)->count();
       }
       
       $return['units'] = Units::all()->count();
